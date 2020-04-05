@@ -2,9 +2,9 @@ package rh;
 
 import java.io.IOException;
 
-public class RhMain {
+public class Main {
 	public static void main(String[] args) throws IOException {
-		ReadPuzzle puzzle= new ReadPuzzle();
+		InputHandler puzzle= new InputHandler();
 		//System.out.println(puzzle.getPuzzle().get(1));
 		int index=1;
 		for (String line : puzzle.getPuzzle()) {
