@@ -1,4 +1,4 @@
-package rush.hour;
+package rash_hour;
 
 public final class GameUtils {
 	private GameUtils() {	
