@@ -1,13 +1,24 @@
 package tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
+import rush_hour.Constants;
+import rush_hour.GameUtils;
 import rush_hour.RawPuzzleObject;
+import rush_hour.Vehicle;
 
 public class TestBoardCreation {
 
@@ -113,24 +124,91 @@ public class TestBoardCreation {
 //		return rawPuzzle;
 //	}
 
-//	Vehicle getVehicle(char identifier, boolean orientation, int size, Point startPoint, Point endPoint) {
-//		Vehicle vehicleToBuild = new Vehicle(identifier, startPoint);
-//
-//		return vehicleToBuild;
-//	}
+	Vehicle getVehicle(char identifier, boolean orientation, int size, Point startPoint, Point endPoint) {
+		Vehicle vehicleToBuild = new Vehicle(identifier, startPoint);
+		vehicleToBuild.setEndPos(endPoint);
+		vehicleToBuild.setOrientation(orientation);
+		vehicleToBuild.setSize(size);
+
+		return vehicleToBuild;
+	}
+
+	public Set<Character> getCarsIdentifiers(String puzzle) {
+		SortedSet<Character> identifiers = new TreeSet<>();
+		for (char c : puzzle.toCharArray()) {
+			if (c != '.') {
+				identifiers.add(c);
+			}
+		}
+		return identifiers;
+	}
+
+	@Test
+	public void testIdentifiersParserFunc() {
+		String puzzleAsString = ".AR.BB.AR...XXR...IDDEEPIFFGHPQQQGHP";
+		Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzleAsString);
+		Character[] expectedManualIdentifiers = { 'A', 'R', 'B', 'P', 'H', 'G', 'Q', 'F', 'D', 'E', 'I', 'X' };
+		List<Character> l1 = new ArrayList<Character>(Arrays.asList(expectedManualIdentifiers));
+		l1 = l1.stream().sorted(Comparator.naturalOrder()).collect(Collectors.toList());
+		assertEquals(expectedIdentifiers.toArray(), l1.toArray());
+	}
 
 	@Test
 	public void testIdentifyingCarKeys() {
 		String puzzleAsString = ".AR.BB.AR...XXR...IDDEEPIFFGHPQQQGHP";
-
-		char[] expectedIdentifiers = { 'A', 'R', 'B', 'P', 'H', 'G', 'Q', 'F', 'D', 'E', 'I', 'X' };
+		Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzleAsString);
 
 		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
-		Collection<Character> vehicles = rawPuzzle.getVehiclesIdentifiers();
-		Arrays.sort(expectedIdentifiers);
-		Object[] arr = vehicles.toArray();
-		Arrays.sort(arr);
-		assertEquals(expectedIdentifiers, arr);
+		Set<Character> vehicles = rawPuzzle.getVehiclesIdentifiers();
+		assertEquals(expectedIdentifiers, vehicles);
+	}
+
+	@Test
+	public void testParsingAllPuzzlesFromInputFile() {
+		ArrayList<String> rawPuzzlesAsString = GameUtils
+				.getRawPuzzlesFromInputFile(GameUtils.getPuzzleInputFile(new String[0]));
+		for (String puzzle : rawPuzzlesAsString) {
+			Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzle);
+			RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzle);
+			Set<Character> vehicles = rawPuzzle.getVehiclesIdentifiers();
+			assertEquals(expectedIdentifiers, vehicles);
+		}
+	}
+
+	@Test
+	public void testParsedVerticalCarDataInSize3() {
+		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('P', Constants.VERTICAL, 3, new Point(0, 5), new Point(2, 5));
+		Vehicle actualVehicle = rawPuzzle.getVehicle('P');
+		assertTrue(expectedVehicle.equals(actualVehicle));
+	}
+
+	@Test
+	public void testParsedVerticalCarDataInSize2() {
+		String puzzleAsString = "AABO..P.BO..PXXO..PQQQ...........RRR";
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('B', Constants.VERTICAL, 2, new Point(0, 2), new Point(1, 2));
+
+		assertEquals(expectedVehicle, rawPuzzle.getVehicle('B'));
+	}
+
+	@Test
+	public void testParsedHorizontalCarDataInSize3() {
+		String puzzleAsString = "OAAP..O..P..OXXP....BQQQ..B..E..RRRE";
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('Q', Constants.HORIZONTAL, 3, new Point(3, 3), new Point(3, 5));
+
+		assertEquals(expectedVehicle, rawPuzzle.getVehicle('Q'));
+	}
+
+	@Test
+	public void testParsedHorizontalCarDataInSize2() {
+		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1), new Point(4, 2));
+
+		assertEquals(expectedVehicle, rawPuzzle.getVehicle('D'));
 	}
 
 //	@Test

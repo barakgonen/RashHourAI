@@ -24,17 +24,57 @@ public class Vehicle {
 		size = 1;
 	}
 
-	public void updateVehicle(Point endPos) {
-		// Need to understand weather car orientation is vertical or horizontal
-		if (startPos.x != endPos.x && startPos.y == endPos.y) {
+	public void updateVehicle(Point _endPos) {
+		if (startPos.x != _endPos.x && startPos.y == _endPos.y) {
 			orientation = Constants.VERTICAL;
 			size += 1;
-		} else if (startPos.x == endPos.x && startPos.y != endPos.y) {
+			endPos = _endPos;
+		} else if (startPos.x == _endPos.x && startPos.y != _endPos.y) {
 			orientation = Constants.HORIZONTAL;
 			size += 1;
+			endPos = _endPos;
 		} else {
 			LOGGER.warning("There is a bug, the car is not vertical and not horizontal!");
 		}
 
+	}
+
+	public Point getEndPos() {
+		return endPos;
+	}
+
+	public int getSize() {
+		return size;
+	}
+
+	public boolean getOrientation() {
+		return orientation;
+	}
+
+	public Point getStartPos() {
+		return startPos;
+	}
+
+	public char getIdentifier() {
+		return identifier;
+	}
+
+	public void setEndPos(Point endPos) {
+		this.endPos = endPos;
+	}
+
+	public void setSize(int size) {
+		this.size = size;
+	}
+
+	public void setOrientation(boolean orientation) {
+		this.orientation = orientation;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		Vehicle comp = (Vehicle) o;
+		return startPos.equals(comp.getStartPos()) && endPos.equals(comp.getEndPos()) && size == comp.getSize()
+				&& orientation == comp.orientation && identifier == comp.identifier;
 	}
 }

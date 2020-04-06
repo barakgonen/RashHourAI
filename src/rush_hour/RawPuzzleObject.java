@@ -3,6 +3,7 @@ package rush_hour;
 import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.logging.Logger;
 
 /**
@@ -70,7 +71,11 @@ public class RawPuzzleObject {
 		return vehicles.values();
 	}
 
-	public Collection<Character> getVehiclesIdentifiers() {
+	public Set<Character> getVehiclesIdentifiers() {
 		return vehicles.keySet();
+	}
+
+	public Vehicle getVehicle(char identifier) {
+		return vehicles.get(identifier);
 	}
 }
