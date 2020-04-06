@@ -1,71 +1,40 @@
 package rush_hour;
-/*
-* @param x:	The x coordinate where the vehicle is.
-* @param y:	The y coordinate where the vehicle is.
-* @param length: The length of the car
-* @param orientation: The orientation of the vehicle (Horizontal or Vertical).
-* @param name: The character associated to this vehicle.
-*/
+
+import java.awt.Point;
+import java.util.logging.Logger;
+
+/**
+ * This class represents a vehicle in our board game. Each vehicle built from
+ * the following attributes: start&end position - car's position on board size -
+ * size of the car orientation - orientation of the car - weather it's vertical
+ * or horizontal. Identifier - id of the car
+ */
 public class Vehicle {
-	private int x; 
-	private int y;
-	private int length;
-	private boolean orient;
-	public static char name = 'a';
-	public static final boolean HORIZONTAL = true;
-	public static final boolean VERTICAL   = false;
-	
-	public Vehicle(int x, int y, int length, boolean orient, char name) {
-		this.x = x;
-		this.y = y;
-		this.length = length;
-		this.orient = orient;
-		this.name = name;
+	public static Logger LOGGER = Logger.getLogger(Main.class.getName());
+
+	private final Point startPos;
+	private Point endPos;
+	private int size;
+	private boolean orientation;
+	private final char identifier;
+
+	public Vehicle(char carIdentifier, Point startPosition) {
+		identifier = carIdentifier;
+		startPos = startPosition;
+		size = 1;
 	}
 
-	public int getX() {
-		return this.x;
-	}
+	public void updateVehicle(Point endPos) {
+		// Need to understand weather car orientation is vertical or horizontal
+		if (startPos.x != endPos.x && startPos.y == endPos.y) {
+			orientation = Constants.VERTICAL;
+			size += 1;
+		} else if (startPos.x == endPos.x && startPos.y != endPos.y) {
+			orientation = Constants.HORIZONTAL;
+			size += 1;
+		} else {
+			LOGGER.warning("There is a bug, the car is not vertical and not horizontal!");
+		}
 
-	public void setX(int x) {
-		this.x = x;
 	}
-
-	public int getY() {
-		return this.y;
-	}
-
-	public void setY(int y) {
-		this.y = y;
-	}
-
-	public int getLength() {
-		return this.length;
-	}
-
-	public void setLength(int length) {
-		this.length = length;
-	}
-
-	public boolean isOrient() {
-		return this.orient;
-	}
-
-	public void setOrient(boolean orient) {
-		this.orient = orient;
-	}
-
-	public char getName() {
-		return this.name;
-	}
-
-	public void setName(char name) {
-		Vehicle.name = name;
-	}
-	
-	
-	
-	
-	
-	
 }
