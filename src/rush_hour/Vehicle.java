@@ -36,7 +36,6 @@ public class Vehicle {
 		} else {
 			LOGGER.warning("There is a bug, the car is not vertical and not horizontal!");
 		}
-
 	}
 
 	public Point getEndPos() {
