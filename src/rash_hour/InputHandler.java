@@ -28,12 +28,12 @@ public final class InputHandler {
 		BufferedReader reader;
 		try {
 			reader = new BufferedReader(new FileReader(inputFilePath));
-			String line = reader.readLine();
-			while (line != null) {
-				LOGGER.info("Read the following line from file: " + line);
-				parsedPuzzles.add(new RawPuzzleObject(line, 1));
+			String puzzleAsString = reader.readLine();
+			while (puzzleAsString != null) {
+				LOGGER.info("Read the following line from file: " + puzzleAsString);
+				parsedPuzzles.add(new RawPuzzleObject(puzzleAsString));
 				LOGGER.info("Parsed puzzle successfully and added to list");
-				line = reader.readLine();
+				puzzleAsString = reader.readLine();
 			}
 		}
 		catch(IOException e) {
