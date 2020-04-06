@@ -1,4 +1,4 @@
-package rash_hour;
+package rush_hour;
 /*
 * @param x:	The x coordinate where the vehicle is.
 * @param y:	The y coordinate where the vehicle is.

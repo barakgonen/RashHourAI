@@ -1,4 +1,4 @@
-package rash_hour;
+package rush_hour;
 
 import java.io.FileReader;
 import java.io.IOException;

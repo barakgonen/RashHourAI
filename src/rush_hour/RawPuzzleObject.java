@@ -1,4 +1,4 @@
-package rash_hour;
+package rush_hour;
 
 /**
  * This class Serializes and De-Serializes out puzzle object from String and to

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" automaticImage="JPEG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="rash_hour.Board" project="RashHourAI" file="/RashHourAI/src/rash_hour/Board.java" 
+  <class id="1" language="java" name="rush_hour.Board" project="RushHourAI" file="/RushHourAI/src/rush_hour/Board.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1762" y="377"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -10,7 +10,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="rash_hour.Main" project="RashHourAI" file="/RashHourAI/src/rash_hour/Main.java" 
+  <class id="2" language="java" name="rush_hour.Main" project="RushHourAI" file="/RushHourAI/src/rush_hour/Main.java" 
     binary="false" corner="BOTTOM_RIGHT">    
     <position height="266" width="421" x="24" y="317"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="rash_hour.RawPuzzleObject" project="RashHourAI" 
-    file="/RashHourAI/src/rash_hour/RawPuzzleObject.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="rush_hour.RawPuzzleObject" project="RushHourAI" 
+    file="/RushHourAI/src/rush_hour/RawPuzzleObject.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1305" y="262"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -28,8 +28,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="rash_hour.InputHandler" project="RashHourAI" 
-    file="/RashHourAI/src/rash_hour/InputHandler.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="4" language="java" name="rush_hour.InputHandler" project="RushHourAI" 
+    file="/RushHourAI/src/rush_hour/InputHandler.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="818" y="212"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="rash_hour.GameUtils" project="RashHourAI" 
-    file="/RashHourAI/src/rash_hour/GameUtils.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="rush_hour.GameUtils" project="RushHourAI" 
+    file="/RushHourAI/src/rush_hour/GameUtils.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2039" y="154"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -46,8 +46,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="rash_hour.Vehicle" project="RashHourAI" 
-    file="/RashHourAI/src/rash_hour/Vehicle.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="rush_hour.Vehicle" project="RushHourAI" 
+    file="/RushHourAI/src/rush_hour/Vehicle.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="2047" y="510"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -55,8 +55,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="rash_hour.BitBoard" project="RashHourAI" 
-    file="/RashHourAI/src/rash_hour/BitBoard.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="7" language="java" name="rush_hour.BitBoard" project="RushHourAI" 
+    file="/RushHourAI/src/rush_hour/BitBoard.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1861" y="629"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -66,15 +66,23 @@
   </class>  
   <dependency id="8">    
     <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="4"/>  
+    <end type="TARGET" refId="3"/>  
   </dependency>  
   <dependency id="9">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="7"/>  
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
   </dependency>  
   <dependency id="10">    
     <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="12">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

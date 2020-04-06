@@ -1,4 +1,4 @@
-package rash_hour;
+package rush_hour;
 
 import java.util.ArrayList;
 import java.util.logging.Level;

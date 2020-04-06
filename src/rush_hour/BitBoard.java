@@ -1,4 +1,4 @@
-package rash_hour;
+package rush_hour;
 
 /*
  * This class represents minimized board
