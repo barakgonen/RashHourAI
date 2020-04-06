@@ -1,15 +1,34 @@
 package rash_hour;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class Main {
-	public static void main(String[] args) throws IOException {
-//		InputHandler puzzle= new InputHandler();
-//		System.out.println(puzzle.getPuzzle().get(1));
-		System.out.println("Hello World!");
-//		int index=1;
-//		for (String line : puzzle.getPuzzle()) {
-//		System.out.println("Puzzle " + index + " = " + line + "\n");
-//		index++;
+    public static Logger LOGGER = Logger.getLogger(Main.class.getName());
+
+	public static String getPuzzleInputFile(String[] args) {
+		String inputFilePath = "./rh.txt";
+		if (args.length > 0) {
+			try {
+				inputFilePath = args[0];
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			LOGGER.warning("You didn't pass input file for this application, using default input file");
+		}
+		LOGGER.info("Puzzle input file path is: " + inputFilePath);
+		return inputFilePath;
+	}
+	
+	public static void main(String[] args) {
+		LOGGER.setLevel(Level.WARNING);
+		ArrayList<RawPuzzleObject> rawPuzzles = InputHandler.getPuzzles(getPuzzleInputFile(args));
+		LOGGER.info("Input file read successfully!");
 	}
 }
