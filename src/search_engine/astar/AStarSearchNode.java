@@ -9,14 +9,13 @@ import java.util.Set;
 import rush_hour.Constants;
 import rush_hour.RawPuzzleObject;
 import rush_hour.Vehicle;
-import search_engine.SearchNodeInterface;
 
 /**
  * This class implements the search node in our game, Search node construct from
  * raw board data which read from an input file and each node knows how to build
  * it's valid successors
  */
-public class AStarSearchNode implements SearchNodeInterface {
+public class AStarSearchNode {
 	protected AStarSearchNode parent;
 	protected int depthInGraph;
 	protected double heuristicValue;
@@ -35,7 +34,6 @@ public class AStarSearchNode implements SearchNodeInterface {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
 	public boolean isGoalNode() {
 		// TODO Auto-generated method stub
 		return false;
@@ -55,9 +53,8 @@ public class AStarSearchNode implements SearchNodeInterface {
 //		}
 	}
 
-	@Override
-	public Set<SearchNodeInterface> getSuccessors() {
-		Set<SearchNodeInterface> successors = new HashSet<>();
+	public Set<AStarSearchNode> getSuccessors() {
+		Set<AStarSearchNode> successors = new HashSet<>();
 		for (Point emptySpot : emptySpots) {
 			for (Character carIdentifier : getNeighbors(emptySpot)) {
 				if (canNeighborMoveHere(emptySpot, carIdentifier)) {

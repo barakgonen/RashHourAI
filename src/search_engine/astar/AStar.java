@@ -1,16 +1,15 @@
 package search_engine.astar;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import search_engine.FibonacciHeap;
 
-public class AStar<T extends AStarSearchNode> {
+public class AStar {
 
-	protected FibonacciHeap<T> openList;
-	protected HashMap<Long, T> ndOpenList;
-	protected HashMap<Long, T> closedList;
-	protected T prev;
+	protected FibonacciHeap<AStarSearchNode> openList;
+	protected HashMap<Long, AStarSearchNode> ndOpenList;
+	protected HashMap<Long, AStarSearchNode> closedList;
+	protected AStarSearchNode prev;
 	protected AStarSolutionStatisticsData solutionStatisticsData;
 
 	// constructor for AStar and its parameters
@@ -32,14 +31,14 @@ public class AStar<T extends AStarSearchNode> {
 	 * put the node we worked with in the closed list .. and we continue with this
 	 * way untill we find the goal. or the openlist is embty.
 	 */
-	public SolvedAstarPuzzle getBestSolution(T startNode) {
+	public SolvedAstarPuzzle getBestSolution(AStarSearchNode startNode) {
 		openList.enqueue(startNode, startNode.getEvaluationFunc());
 		ndOpenList.put(startNode.getId(), startNode);
 
-		T bestGoal = null;
+		AStarSearchNode bestGoal = null;
 		int nodesCounter = 0;
 		while (!openList.isEmpty()) {
-			T currentNode = openList.min().getValue();
+			AStarSearchNode currentNode = openList.min().getValue();
 			if (ndOpenList.containsKey(currentNode.getId()) && shouldNotExpandNode(currentNode)) {
 				openList.dequeueMin();
 				continue;
@@ -77,11 +76,9 @@ public class AStar<T extends AStarSearchNode> {
 			if (currentNode.isGoalNode()) {
 				continue;
 			}
-			ArrayList<T> neighbors = (ArrayList<T>) currentNode.getSuccessors();
 
 			// loop for working on hash tables, open and closed lists to work with nodes
-			for (int i = 0; i < neighbors.size(); i++) {
-				T successorNode = neighbors.get(i);
+			for (AStarSearchNode successorNode : currentNode.getSuccessors()) {
 				if (closedList.containsKey(successorNode.getId())) {
 					continue;
 				}
@@ -112,7 +109,7 @@ public class AStar<T extends AStarSearchNode> {
 		return new SolvedAstarPuzzle(bestGoal, solutionStatisticsData);
 	}
 
-	private boolean shouldNotExpandNode(T currentNode) {
+	private boolean shouldNotExpandNode(AStarSearchNode currentNode) {
 		return ndOpenList.get(currentNode.getId()).getEvaluationFunc() < currentNode.getEvaluationFunc();
 	}
 }

@@ -23,5 +23,7 @@ public interface SearchNodeInterface {
 	 */
 	Set<SearchNodeInterface> getSuccessors();
 
+	public long getId();
+
 	// Should be 3rd. func to get current state
 }

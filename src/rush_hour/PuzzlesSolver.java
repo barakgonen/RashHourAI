@@ -29,8 +29,9 @@ public class PuzzlesSolver {
 	}
 
 	private void solveSinglePuzzle(RawPuzzleObject rawPuzzle) {
-		AStar<AStarSearchNode> searcher = new AStar<AStarSearchNode>();
+		AStar searcher = new AStar();
 		SolvedAstarPuzzle result = searcher.getBestSolution(new AStarSearchNode(rawPuzzle));
-		statisticsWriter.storeResult(result.getStatisticsData());
+		if (result != null)
+			statisticsWriter.storeResult(result.getStatisticsData());
 	}
 }

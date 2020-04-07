@@ -15,7 +15,8 @@ public class Main {
 		ArrayList<String> rawPuzzlesAsString = GameUtils.getRawPuzzlesFromInputFile(args);
 		ArrayList<RawPuzzleObject> rawPuzzles = InputHandler.getPuzzles(rawPuzzlesAsString);
 		LOGGER.info("Input file read successfully!");
-		PuzzlesSolver solver = new PuzzlesSolver(new StatisticsWriter<AStarSolutionStatisticsData>(), rawPuzzles);
+		StatisticsWriter<AStarSolutionStatisticsData> statisticsWriter = new StatisticsWriter<>();
+		PuzzlesSolver solver = new PuzzlesSolver(statisticsWriter, rawPuzzles);
 		solver.startSolve();
 	}
 }
