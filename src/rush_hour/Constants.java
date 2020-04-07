@@ -5,4 +5,5 @@ public final class Constants {
 	public static final boolean HORIZONTAL = true;
 	public static final boolean VERTICAL = false;
 	public static final String RAW_CSV_PUZZELS_OUTPUT_PATH = "./rawPuzzlesAsCsv/";
+	public static final Character UKNOWN_IDENTIFIER = ' ';
 }

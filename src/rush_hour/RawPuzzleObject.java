@@ -36,6 +36,18 @@ public class RawPuzzleObject {
 		buildVehiclesMap();
 	}
 
+	public Collection<Point> getEmptySpots() {
+		return emptySpots;
+	}
+
+	public void setEmptySpots(Collection<Point> emptySpots) {
+		this.emptySpots = emptySpots;
+	}
+
+	public void setVehicles(HashMap<Character, Vehicle> vehicles) {
+		this.vehicles = vehicles;
+	}
+
 	private void buildVehiclesMap() {
 		for (int row = 0; row < Constants.BOARD_SIZE; ++row) {
 			for (int col = 0; col < Constants.BOARD_SIZE; ++col) {
@@ -68,6 +80,10 @@ public class RawPuzzleObject {
 				if (puzzleBoard[row][col] != other.getPuzzleBoard()[row][col])
 					return false;
 		return true;
+	}
+
+	public HashMap<Character, Vehicle> getVehiclesMapping() {
+		return vehicles;
 	}
 
 	public Collection<Vehicle> getVehicles() {

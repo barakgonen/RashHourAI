@@ -1,8 +1,14 @@
 package search_engine.astar;
 
+import java.awt.Point;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
+import rush_hour.Constants;
 import rush_hour.RawPuzzleObject;
+import rush_hour.Vehicle;
 import search_engine.SearchNodeInterface;
 
 /**
@@ -11,18 +17,18 @@ import search_engine.SearchNodeInterface;
  * it's valid successors
  */
 public class AStarSearchNode implements SearchNodeInterface {
-
 	protected AStarSearchNode parent;
 	protected int depthInGraph;
 	protected double heuristicValue;
 	protected int numberOfMoves;
 	protected double evaluationFunc;
 	protected long id = 1; // Think about it, it's not relevant to any A*, just for specific
-	protected int depth;
+	protected Collection<Point> emptySpots;
+	protected HashMap<Character, Vehicle> vehicles;
 
-	// TODO: refactor with Assia's code, to convert RawPuzzleObject to
-	// AStarSearchNode + write getSuccessor func
 	public AStarSearchNode(RawPuzzleObject obj) {
+		emptySpots = obj.getEmptySpots();
+		vehicles = obj.getVehiclesMapping();
 	}
 
 	public AStarSearchNode() {
@@ -50,64 +56,66 @@ public class AStarSearchNode implements SearchNodeInterface {
 	}
 
 	@Override
-	public Collection<SearchNodeInterface> getSuccessors() {
-		// TODO Auto-generated method stub
-		/*
-		 * method for getting all the moves possible and legal from this node.
-		 * 
-		 * 
-		 * returns them in array to use later.
-		 */
-//		public Node[] nextOptions() {
-//			ArrayList<Node> optionsArray = new ArrayList<Node>();
-//			for(int i=0; i<this.getPuz().getNumOfCars() ; i++) {
-//							for(int j=0; j<4;j++) {
-//									for(int k=1; k<this.getPuz().getSize();k++) {
-//						char[] cmov = new char[3];
-//						String mov = new String();
-//						cmov[0] = this.getPuz().getCarSymbol()[i];
-//						cmov[2] = (char)(k+'0');
-//						
-//						switch(j) {
-//						case 0:
-//							cmov[1] = 'L';
-//							mov = new String(cmov);
-//							if(this.getPuz().legal(mov, i)) {
-//								optionsArray.add(new Node(mov, this));
-//							}
-//							break;
-//						case 1:
-//							cmov[1] = 'R';
-//							mov = new String(cmov);
-//							if(this.getPuz().legal(mov, i)) {
-//								optionsArray.add(new Node(mov, this));
-//							}
-//							break;
-//						case 2:
-//							cmov[1] = 'U';
-//							mov = new String(cmov);
-//							if(this.getPuz().legal(mov, i)) {
-//								optionsArray.add(new Node(mov, this));
-//							}
-//							break;
-//						case 3:
-//							cmov[1] = 'D';
-//							mov = new String(cmov);
-//							if(this.getPuz().legal(mov, i)) {
-//								optionsArray.add(new Node(mov, this));
-//							}
-//							break;
-//							default:
-//								break;
-//						}	
-//					}
-//				}
-//				
-//			}
-//			
-//			return (Node[]) optionsArray.toArray(new Node[0]);
-//		}
-		return null;
+	public Set<SearchNodeInterface> getSuccessors() {
+		Set<SearchNodeInterface> successors = new HashSet<>();
+		for (Point emptySpot : emptySpots) {
+			for (Character carIdentifier : getNeighbors(emptySpot)) {
+				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
+					// This is a valid successor, create new empty spaces set and new car map add it
+					// to set
+				}
+			}
+		}
+		return successors;
+	}
+
+	private Set<Character> getNeighbors(Point currentEmptySpot) {
+		Set<Character> toReturn = new HashSet<>();
+		toReturn.add(getNorthestNeighbor(currentEmptySpot));
+		toReturn.add(getSouthestNeighbor(currentEmptySpot));
+		toReturn.add(getEastestNeighbor(currentEmptySpot));
+		toReturn.add(getWestestNeighbor(currentEmptySpot));
+		return toReturn;
+	}
+
+	private Character getCarIdentifier(Point currentEmptySpot) {
+		for (Vehicle v : vehicles.values())
+			if (v.isPointIntersectsWithMe(currentEmptySpot))
+				return v.getIdentifier();
+		return Constants.UKNOWN_IDENTIFIER;
+	}
+
+	private Character getNorthestNeighbor(Point currentEmptySpot) {
+		Character carIdentifier = getCarIdentifier(currentEmptySpot);
+		if (currentEmptySpot.getX() <= 0 || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+			return carIdentifier;
+		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX() - 1, (int) currentEmptySpot.getY()));
+	}
+
+	private Character getSouthestNeighbor(Point currentEmptySpot) {
+		Character carIdentifier = getCarIdentifier(currentEmptySpot);
+		if (currentEmptySpot.getX() > Constants.BOARD_SIZE || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+			return carIdentifier;
+		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX() + 1, (int) currentEmptySpot.getY()));
+	}
+
+	private Character getEastestNeighbor(Point currentEmptySpot) {
+		Character carIdentifier = getCarIdentifier(currentEmptySpot);
+		if (currentEmptySpot.getY() < Constants.BOARD_SIZE || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+			return carIdentifier;
+		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() + 1));
+	}
+
+	private Character getWestestNeighbor(Point currentEmptySpot) {
+		Character carIdentifier = getCarIdentifier(currentEmptySpot);
+		if (currentEmptySpot.getY() >= 0 || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+			return carIdentifier;
+		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() - 1));
+	}
+
+	private boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
+		Vehicle neighborVehicle = vehicles.get(carIdentifier);
+		return true;
 	}
 
 	public double getEvaluationFunc() {
@@ -123,7 +131,7 @@ public class AStarSearchNode implements SearchNodeInterface {
 	}
 
 	public int getDepth() {
-		return depth;
+		return depthInGraph;
 	}
 
 //	/*

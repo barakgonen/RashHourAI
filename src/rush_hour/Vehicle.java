@@ -76,4 +76,9 @@ public class Vehicle {
 		return startPos.equals(comp.getStartPos()) && endPos.equals(comp.getEndPos()) && size == comp.getSize()
 				&& orientation == comp.orientation && identifier == comp.identifier;
 	}
+
+	public boolean isPointIntersectsWithMe(Point pnt) {
+		return (startPos.getX() <= pnt.getX() && pnt.getX() <= endPos.getX())
+				|| (endPos.getX() <= pnt.getX() && pnt.getX() <= endPos.getX());
+	}
 }

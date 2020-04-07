@@ -1,6 +1,6 @@
 package search_engine;
 
-import java.util.Collection;
+import java.util.Set;
 
 /**
  * This interface defines how do search node should be represented
@@ -21,7 +21,7 @@ public interface SearchNodeInterface {
 	 * 
 	 * @return
 	 */
-	Collection<SearchNodeInterface> getSuccessors();
+	Set<SearchNodeInterface> getSuccessors();
 
 	// Should be 3rd. func to get current state
 }

@@ -15,6 +15,21 @@ public final class GameUtils {
 	private GameUtils() {
 	}
 
+	public static String getInputFilePath(String[] args) {
+		String inputFilePath = "./rh.txt";
+		if (args.length > 0) {
+			try {
+				inputFilePath = args[0];
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			LOGGER.warning("You didn't pass input file for this application, using default input file");
+		}
+		LOGGER.info("Puzzle input file path is: " + inputFilePath);
+		return inputFilePath;
+	}
+
 	public static ArrayList<String> getRawPuzzlesFromInputFile(String[] args) {
 		String inputFilePath = GameUtils.getInputFilePath(args);
 
@@ -34,21 +49,6 @@ public final class GameUtils {
 		}
 		parsePuzzlesToCsv(rawPuzzles);
 		return rawPuzzles;
-	}
-
-	public static String getInputFilePath(String[] args) {
-		String inputFilePath = "./rh.txt";
-		if (args.length > 0) {
-			try {
-				inputFilePath = args[0];
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			LOGGER.warning("You didn't pass input file for this application, using default input file");
-		}
-		LOGGER.info("Puzzle input file path is: " + inputFilePath);
-		return inputFilePath;
 	}
 
 	public static String getPuzzleRawCsvPath(int puzzleNumber) {
