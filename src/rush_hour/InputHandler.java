@@ -22,8 +22,8 @@ public final class InputHandler {
 	 *         condition from input file.
 	 */
 	public static ArrayList<RawPuzzleObject> getPuzzles(ArrayList<String> rawPuzzles) {
-		ArrayList<RawPuzzleObject> parsedPuzzles = new ArrayList<RawPuzzleObject>();
-		rawPuzzles.forEach(rawPuzzle -> parsedPuzzles.add(new RawPuzzleObject(rawPuzzle)));
-		return parsedPuzzles;
+		ArrayList<RawPuzzleObject> rawPuzzlesList = new ArrayList<RawPuzzleObject>();
+		rawPuzzles.forEach(rawPuzzle -> rawPuzzlesList.add(new RawPuzzleObject(rawPuzzle)));
+		return rawPuzzlesList;
 	}
 }

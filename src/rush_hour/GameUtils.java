@@ -15,11 +15,13 @@ public final class GameUtils {
 	private GameUtils() {
 	}
 
-	public static ArrayList<String> getRawPuzzlesFromInputFile(String fileName) {
+	public static ArrayList<String> getRawPuzzlesFromInputFile(String[] args) {
+		String inputFilePath = GameUtils.getInputFilePath(args);
+
 		ArrayList<String> rawPuzzles = new ArrayList<String>();
 		BufferedReader reader;
 		try {
-			reader = new BufferedReader(new FileReader(fileName));
+			reader = new BufferedReader(new FileReader(inputFilePath));
 			String rawPuzzle = reader.readLine();
 			while (rawPuzzle != null) {
 				rawPuzzles.add(rawPuzzle);
@@ -30,10 +32,11 @@ public final class GameUtils {
 			LOGGER.severe("IOException had catched, exiting the application!");
 			System.exit(-1);
 		}
+		parsePuzzlesToCsv(rawPuzzles);
 		return rawPuzzles;
 	}
 
-	public static String getPuzzleInputFile(String[] args) {
+	public static String getInputFilePath(String[] args) {
 		String inputFilePath = "./rh.txt";
 		if (args.length > 0) {
 			try {

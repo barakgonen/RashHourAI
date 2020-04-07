@@ -1,6 +1,7 @@
 package rush_hour;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Set;
@@ -16,6 +17,7 @@ public class RawPuzzleObject {
 	private char[][] puzzleBoard;
 
 	private HashMap<Character, Vehicle> vehicles;
+	private Collection<Point> emptySpots;
 
 	/**
 	 * Construction of an instance out of puzzle string, read from input file
@@ -26,25 +28,26 @@ public class RawPuzzleObject {
 		// Initialization of new char-board
 		puzzleBoard = new char[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
 		vehicles = new HashMap<Character, Vehicle>();
+		emptySpots = new ArrayList<Point>();
 
 		for (int row = 0; row < Constants.BOARD_SIZE; ++row)
 			for (int col = 0; col < Constants.BOARD_SIZE; ++col)
 				puzzleBoard[row][col] = puzzleAsString.charAt((row * Constants.BOARD_SIZE + col));
-		setVehiclesMap();
-
+		buildVehiclesMap();
 	}
 
-	private void setVehiclesMap() {
-		char currentCellData;
+	private void buildVehiclesMap() {
 		for (int row = 0; row < Constants.BOARD_SIZE; ++row) {
 			for (int col = 0; col < Constants.BOARD_SIZE; ++col) {
-				currentCellData = puzzleBoard[row][col];
+				char currentCellData = puzzleBoard[row][col];
+				Point currentCoordinate = new Point(row, col);
 				if (currentCellData != '.') {
 					if (vehicles.containsKey(currentCellData))
-						vehicles.get(currentCellData).updateVehicle(new Point(row, col));
+						vehicles.get(currentCellData).updateVehicle(currentCoordinate);
 					else
-						vehicles.put(currentCellData, new Vehicle(currentCellData, new Point(row, col)));
-				}
+						vehicles.put(currentCellData, new Vehicle(currentCellData, currentCoordinate));
+				} else
+					emptySpots.add(currentCoordinate);
 			}
 		}
 		LOGGER.info("Finished mapping cars");

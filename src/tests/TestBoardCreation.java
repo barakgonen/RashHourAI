@@ -62,8 +62,7 @@ public class TestBoardCreation {
 
 	@Test
 	public void testParsingAllPuzzlesFromInputFile() {
-		ArrayList<String> rawPuzzlesAsString = GameUtils
-				.getRawPuzzlesFromInputFile(GameUtils.getPuzzleInputFile(new String[0]));
+		ArrayList<String> rawPuzzlesAsString = GameUtils.getRawPuzzlesFromInputFile(new String[0]);
 		for (String puzzle : rawPuzzlesAsString) {
 			Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzle);
 			RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzle);
