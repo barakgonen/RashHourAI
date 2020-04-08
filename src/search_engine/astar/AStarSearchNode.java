@@ -43,14 +43,16 @@ public class AStarSearchNode {
 	}
 
 	// 1. test isGoalNode
+	// 2. test canNeighborMoveHere
 	// 2. Implement successor
-	// 3. Integration with canNeighborMoveHere
 	public Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
 		for (Point emptySpot : emptySpots) {
 			for (Character carIdentifier : getNeighbors(emptySpot)) {
 				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
 					// Implement successor
+					// Need to construct new AStarSearchNode with new board order - new emptySpots &
+					// new vehicles position according to movement
 				}
 			}
 		}
@@ -101,10 +103,14 @@ public class AStarSearchNode {
 
 	private boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
 		Vehicle neighborVehicle = vehicles.get(carIdentifier);
-		if((emptySpot.getX()==neighborVehicle.getStartPos().getX() )&&
-				(emptySpot.getX()==neighborVehicle.getEndPos().getX())) {return true;}
-		if((emptySpot.getY()==neighborVehicle.getStartPos().getY() )&&
-				(emptySpot.getY()==neighborVehicle.getEndPos().getY())) {return true;}
+		if ((emptySpot.getX() == neighborVehicle.getStartPos().getX())
+				&& (emptySpot.getX() == neighborVehicle.getEndPos().getX())) {
+			return true;
+		}
+		if ((emptySpot.getY() == neighborVehicle.getStartPos().getY())
+				&& (emptySpot.getY() == neighborVehicle.getEndPos().getY())) {
+			return true;
+		}
 		return false;
 	}
 
