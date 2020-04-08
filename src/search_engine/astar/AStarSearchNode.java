@@ -42,7 +42,6 @@ public class AStarSearchNode {
 		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().equals(Constants.GOAL_STATE_POS);
 	}
 
-	// 1. test isGoalNode
 	// 2. test canNeighborMoveHere
 	// 2. Implement successor
 	public Set<AStarSearchNode> getSuccessors() {
@@ -50,6 +49,7 @@ public class AStarSearchNode {
 		for (Point emptySpot : emptySpots) {
 			for (Character carIdentifier : getNeighbors(emptySpot)) {
 				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
+//					successors.add(new AStarSearchNode());
 					// Implement successor
 					// Need to construct new AStarSearchNode with new board order - new emptySpots &
 					// new vehicles position according to movement
