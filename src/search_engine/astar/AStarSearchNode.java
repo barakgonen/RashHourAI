@@ -39,25 +39,10 @@ public class AStarSearchNode {
 	}
 
 	public boolean isGoalNode() {
-		// TODO Auto-generated method stub
-		return false;
-//		/*method for checking if we reached the goal or not.
-//		 * 
-//		 * we chose the goal to be the board where the way infront of the X is embty meaning no cars blocking it, which
-//		 * is easier and spare us for extra nodes calculating.*/
-//		public boolean isGoal() {
-//			
-//			for(int i= this.getPuz().getcPosition()[0] + this.getPuz().getCarSize()[0] ; i < this.getPuz().getSize() ; i++ ) {
-//				if(this.getPuz().getBoard()[this.getPuz().getFixedArr()[0]][i] != '.') {
-//					return false;
-//				}
-//			}
-//			return true;
-//			
-//		}
+		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().equals(Constants.GOAL_STATE_POS);
 	}
 
-	// 1. isGoalNode
+	// 1. test isGoalNode
 	// 2. Implement successor
 	// 3. Integration with canNeighborMoveHere
 	public Set<AStarSearchNode> getSuccessors() {

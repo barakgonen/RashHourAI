@@ -17,4 +17,5 @@ public final class Constants {
 	public static final Character UKNOWN_IDENTIFIER = ' ';
 	public static final Collection<Point> TARGET_VEHICLE_EXIT_PATH = IntStream.rangeClosed(0, BOARD_SIZE - 1)
 			.mapToObj(v -> new Point(EXIT_RAW, v)).collect(Collectors.toList());
+	public static final Point GOAL_STATE_POS = new Point(EXIT_RAW, BOARD_SIZE - 1);
 }
