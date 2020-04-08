@@ -116,7 +116,11 @@ public class AStarSearchNode {
 
 	private boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
 		Vehicle neighborVehicle = vehicles.get(carIdentifier);
-		return true;
+		if((emptySpot.getX()==neighborVehicle.getStartPos().getX() )&&
+				(emptySpot.getX()==neighborVehicle.getEndPos().getX())) {return true;}
+		if((emptySpot.getY()==neighborVehicle.getStartPos().getY() )&&
+				(emptySpot.getY()==neighborVehicle.getEndPos().getY())) {return true;}
+		return false;
 	}
 
 	public double getEvaluationFunc() {
