@@ -24,7 +24,8 @@ public final class GameUtils {
 				e.printStackTrace();
 			}
 		} else {
-			LOGGER.warning("You didn't pass input file for this application, using default input file");
+			LOGGER.warning(
+					"You didn't pass input file for this application, assuming you would like me to use default input file");
 		}
 		LOGGER.info("Puzzle input file path is: " + inputFilePath);
 		return inputFilePath;
@@ -74,7 +75,11 @@ public final class GameUtils {
 					String lineToPrint = rawIndex + "|,";
 					for (char cell : puzzleRaw.toCharArray())
 						lineToPrint += cell + ",";
-					lineToPrint += "|\n";
+					if (rawIndex == 2)
+						lineToPrint += "EXIT,";
+					else
+						lineToPrint += "|";
+					lineToPrint += "\n";
 					myWriter.write(lineToPrint);
 					rawIndex += 1;
 				}
