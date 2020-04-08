@@ -20,6 +20,16 @@ import rush_hour.RawPuzzleObject;
 import rush_hour.Vehicle;
 
 public class TestBoardCreation {
+
+	public Vehicle getVehicle(char identifier, boolean orientation, int size, Point startPoint, Point endPoint) {
+		Vehicle vehicleToBuild = new Vehicle(identifier, startPoint);
+		vehicleToBuild.setEndPos(endPoint);
+		vehicleToBuild.setOrientation(orientation);
+		vehicleToBuild.setSize(size);
+
+		return vehicleToBuild;
+	}
+
 	public Set<Character> getCarsIdentifiers(String puzzle) {
 		SortedSet<Character> identifiers = new TreeSet<>();
 		for (char c : puzzle.toCharArray()) {
@@ -45,7 +55,7 @@ public class TestBoardCreation {
 		String puzzleAsString = ".AR.BB.AR...XXR...IDDEEPIFFGHPQQQGHP";
 		Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzleAsString);
 
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 1);
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
 		Set<Character> vehicles = rawPuzzle.getVehiclesIdentifiers();
 		assertEquals(expectedIdentifiers, vehicles);
 	}
@@ -55,7 +65,7 @@ public class TestBoardCreation {
 		ArrayList<String> rawPuzzlesAsString = GameUtils.getRawPuzzlesFromInputFile(new String[0]);
 		for (String puzzle : rawPuzzlesAsString) {
 			Set<Character> expectedIdentifiers = getCarsIdentifiers(puzzle);
-			RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzle, 2);
+			RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzle);
 			Set<Character> vehicles = rawPuzzle.getVehiclesIdentifiers();
 			assertEquals(expectedIdentifiers, vehicles);
 		}
@@ -64,8 +74,8 @@ public class TestBoardCreation {
 	@Test
 	public void testParsedVerticalCarDataInSize3() {
 		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('P', Constants.VERTICAL, 3, new Point(0, 5), new Point(2, 5));
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('P', Constants.VERTICAL, 3, new Point(0, 5), new Point(2, 5));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('P'));
 	}
@@ -73,8 +83,8 @@ public class TestBoardCreation {
 	@Test
 	public void testParsedVerticalCarDataInSize2() {
 		String puzzleAsString = "AABO..P.BO..PXXO..PQQQ...........RRR";
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('B', Constants.VERTICAL, 2, new Point(0, 2), new Point(1, 2));
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('B', Constants.VERTICAL, 2, new Point(0, 2), new Point(1, 2));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('B'));
 	}
@@ -82,8 +92,8 @@ public class TestBoardCreation {
 	@Test
 	public void testParsedHorizontalCarDataInSize3() {
 		String puzzleAsString = "OAAP..O..P..OXXP....BQQQ..B..E..RRRE";
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('Q', Constants.HORIZONTAL, 3, new Point(3, 3), new Point(3, 5));
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('Q', Constants.HORIZONTAL, 3, new Point(3, 3), new Point(3, 5));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('Q'));
 	}
@@ -91,8 +101,8 @@ public class TestBoardCreation {
 	@Test
 	public void testParsedHorizontalCarDataInSize2() {
 		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1), new Point(4, 2));
+		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString);
+		Vehicle expectedVehicle = getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1), new Point(4, 2));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('D'));
 	}

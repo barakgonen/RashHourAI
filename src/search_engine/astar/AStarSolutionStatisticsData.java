@@ -16,8 +16,8 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 	protected int minDepth;
 	protected int maxDepth;
 
-	public AStarSolutionStatisticsData(int solutionID) {
-		super(solutionID);
+	public AStarSolutionStatisticsData() {
+		super();
 		penetrance = 0;
 		branchingFactor = 0;
 		numberOfNodes = 0;

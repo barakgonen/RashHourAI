@@ -24,8 +24,7 @@ public final class GameUtils {
 				e.printStackTrace();
 			}
 		} else {
-			LOGGER.warning(
-					"You didn't pass input file for this application, assuming you would like me to use default input file");
+			LOGGER.warning("You didn't pass input file for this application, using default input file");
 		}
 		LOGGER.info("Puzzle input file path is: " + inputFilePath);
 		return inputFilePath;
@@ -75,11 +74,7 @@ public final class GameUtils {
 					String lineToPrint = rawIndex + "|,";
 					for (char cell : puzzleRaw.toCharArray())
 						lineToPrint += cell + ",";
-					if (rawIndex == Constants.EXIT_RAW)
-						lineToPrint += "EXIT,";
-					else
-						lineToPrint += "|";
-					lineToPrint += "\n";
+					lineToPrint += "|\n";
 					myWriter.write(lineToPrint);
 					rawIndex += 1;
 				}
@@ -92,22 +87,6 @@ public final class GameUtils {
 			}
 			puzzleNumber += 1;
 		}
-	}
 
-	public static String getOutputFileName(String[] args) {
-		String outputFileName = "rh";
-		if (args.length > 0) {
-			try {
-				String inputFileNameWithSuffix = args[0];
-				outputFileName = inputFileNameWithSuffix.substring(0, inputFileNameWithSuffix.lastIndexOf('.'));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
-			LOGGER.warning(
-					"You didn't pass input file for this application, assuming you would like me to use default input file");
-		}
-		LOGGER.info("Puzzles statistics output file name is: " + outputFileName);
-		return outputFileName;
 	}
 }
