@@ -18,17 +18,19 @@ public class RawPuzzleObject {
 
 	private HashMap<Character, Vehicle> vehicles;
 	private Collection<Point> emptySpots;
+	private final int puzzleId;
 
 	/**
 	 * Construction of an instance out of puzzle string, read from input file
 	 * 
 	 * @param puzzleAsString - representation of current puzzle
 	 */
-	public RawPuzzleObject(String puzzleAsString) {
+	public RawPuzzleObject(String puzzleAsString, int puzzleID) {
 		// Initialization of new char-board
 		puzzleBoard = new char[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
 		vehicles = new HashMap<Character, Vehicle>();
 		emptySpots = new ArrayList<Point>();
+		puzzleId = puzzleID;
 
 		for (int row = 0; row < Constants.BOARD_SIZE; ++row)
 			for (int col = 0; col < Constants.BOARD_SIZE; ++col)
@@ -96,5 +98,9 @@ public class RawPuzzleObject {
 
 	public Vehicle getVehicle(char identifier) {
 		return vehicles.get(identifier);
+	}
+
+	public int getPuzzleId() {
+		return puzzleId;
 	}
 }

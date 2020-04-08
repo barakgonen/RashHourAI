@@ -18,7 +18,6 @@ public class AStar {
 		ndOpenList = new HashMap<>();
 		closedList = new HashMap<>();
 		prev = null;
-		solutionStatisticsData = new AStarSolutionStatisticsData();
 	}
 
 	/*
@@ -32,6 +31,7 @@ public class AStar {
 	 * way untill we find the goal. or the openlist is embty.
 	 */
 	public SolvedAstarPuzzle getBestSolution(AStarSearchNode startNode) {
+		solutionStatisticsData = new AStarSolutionStatisticsData(startNode.getPuzzleID());
 		openList.enqueue(startNode, startNode.getEvaluationFunc());
 		ndOpenList.put(startNode.getId(), startNode);
 
@@ -99,10 +99,10 @@ public class AStar {
 		solutionStatisticsData.calculateFinalData();
 
 		if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000) {
-			System.out.println("FAILED");
+			System.out.println("FAILED solving puzzle: " + startNode.getPuzzleID());
 			return null;
 		} else if (bestGoal == null) {
-			System.out.println("No Solution");
+			System.out.println("No Solution for puzzle: " + startNode.getPuzzleID());
 			return null;
 		}
 

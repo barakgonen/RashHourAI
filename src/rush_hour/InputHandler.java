@@ -11,7 +11,10 @@ import java.util.logging.Logger;
 public final class InputHandler {
 	private static Logger LOGGER = Logger.getLogger(Main.class.getName());
 
+	static int puzzleID;
+
 	private InputHandler() {
+		puzzleID = 0;
 	}
 
 	/**
@@ -23,7 +26,7 @@ public final class InputHandler {
 	 */
 	public static ArrayList<RawPuzzleObject> getPuzzles(ArrayList<String> rawPuzzles) {
 		ArrayList<RawPuzzleObject> rawPuzzlesList = new ArrayList<RawPuzzleObject>();
-		rawPuzzles.forEach(rawPuzzle -> rawPuzzlesList.add(new RawPuzzleObject(rawPuzzle)));
+		rawPuzzles.forEach(rawPuzzle -> rawPuzzlesList.add(new RawPuzzleObject(rawPuzzle, ++puzzleID)));
 		return rawPuzzlesList;
 	}
 }

@@ -21,17 +21,21 @@ public class AStarSearchNode {
 	protected double heuristicValue;
 	protected int numberOfMoves;
 	protected double evaluationFunc;
-	protected long id = 1; // Think about it, it's not relevant to any A*, just for specific
+	protected int id = 1; // Think about it, it's not relevant to any A*, just for specific
 	protected Collection<Point> emptySpots;
 	protected HashMap<Character, Vehicle> vehicles;
+	final protected int puzzleID;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
 		emptySpots = obj.getEmptySpots();
 		vehicles = obj.getVehiclesMapping();
+		puzzleID = obj.getPuzzleId();
 	}
 
-	public AStarSearchNode() {
-		// TODO Auto-generated constructor stub
+	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID) {
+		this.emptySpots = emptySpots;
+		this.vehicles = vehicles;
+		this.puzzleID = puzzleID;
 	}
 
 	public boolean isGoalNode() {
@@ -53,13 +57,15 @@ public class AStarSearchNode {
 //		}
 	}
 
+	// 1. isGoalNode
+	// 2. Implement successor
+	// 3. Integration with canNeighborMoveHere
 	public Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
 		for (Point emptySpot : emptySpots) {
 			for (Character carIdentifier : getNeighbors(emptySpot)) {
 				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
-					// This is a valid successor, create new empty spaces set and new car map add it
-					// to set
+					// Implement successor
 				}
 			}
 		}
@@ -76,10 +82,8 @@ public class AStarSearchNode {
 	}
 
 	private Character getCarIdentifier(Point currentEmptySpot) {
-		for (Vehicle v : vehicles.values())
-			if (v.isPointIntersectsWithMe(currentEmptySpot))
-				return v.getIdentifier();
-		return Constants.UKNOWN_IDENTIFIER;
+		return vehicles.keySet().stream().filter(v -> vehicles.get(v).isPointIntersectsWithMe(currentEmptySpot))
+				.findAny().orElse(Constants.UKNOWN_IDENTIFIER);
 	}
 
 	private Character getNorthestNeighbor(Point currentEmptySpot) {
@@ -129,6 +133,15 @@ public class AStarSearchNode {
 
 	public int getDepth() {
 		return depthInGraph;
+	}
+
+	public int getPuzzleID() {
+		return puzzleID;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		return true;
 	}
 
 //	/*

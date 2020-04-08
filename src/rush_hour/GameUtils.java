@@ -75,7 +75,7 @@ public final class GameUtils {
 					String lineToPrint = rawIndex + "|,";
 					for (char cell : puzzleRaw.toCharArray())
 						lineToPrint += cell + ",";
-					if (rawIndex == 2)
+					if (rawIndex == Constants.EXIT_RAW)
 						lineToPrint += "EXIT,";
 					else
 						lineToPrint += "|";
@@ -92,6 +92,22 @@ public final class GameUtils {
 			}
 			puzzleNumber += 1;
 		}
+	}
 
+	public static String getOutputFileName(String[] args) {
+		String outputFileName = "rh";
+		if (args.length > 0) {
+			try {
+				String inputFileNameWithSuffix = args[0];
+				outputFileName = inputFileNameWithSuffix.substring(0, inputFileNameWithSuffix.lastIndexOf('.'));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			LOGGER.warning(
+					"You didn't pass input file for this application, assuming you would like me to use default input file");
+		}
+		LOGGER.info("Puzzles statistics output file name is: " + outputFileName);
+		return outputFileName;
 	}
 }
