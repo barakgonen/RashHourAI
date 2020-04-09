@@ -68,7 +68,7 @@ public class Vehicle {
 				final int numberOfStepsToMove = (int) (startPos.getX() - pointToMoveTo.getX());
 				final int tempEndPos = (int) endPos.getX();
 				startPos = new Point(pointToMoveTo);
-				endPos = new Point((int) endPos.getY(), (int) (endPos.getX() - numberOfStepsToMove));
+				endPos = new Point((int) (endPos.getX() - numberOfStepsToMove), (int) endPos.getY());
 				for (int endIndex = tempEndPos; endIndex > endPos.getX(); endIndex--) {
 					newEmptyPoints.add(new Point(endIndex, (int) endPos.getY()));
 				}
@@ -78,7 +78,7 @@ public class Vehicle {
 				endPos = new Point(pointToMoveTo);
 				startPos = new Point((int) (startPos.getX() + numberOfStepsToMove), (int) startPos.getY());
 				for (int endIndex = tempEndPos; endIndex < startPos.getX(); endIndex++) {
-					newEmptyPoints.add(new Point((int) endPos.getY(), endIndex));
+					newEmptyPoints.add(new Point(endIndex, (int) endPos.getY()));
 				}
 			}
 		}
