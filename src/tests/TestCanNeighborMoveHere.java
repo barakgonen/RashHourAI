@@ -30,13 +30,15 @@ public class TestCanNeighborMoveHere {
 		Random random = new Random();
 		puzzleID = random.nextInt();
 		carIdentifier = (char) (random.nextInt(26) + 65);
+		vehiclesMap.put(Constants.TARGET_VEHICLE_IDENTIFIER, TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER,
+				Constants.HORIZONTAL, 2, new Point(Constants.EXIT_RAW, 0), new Point(Constants.EXIT_RAW, 1)));
 	}
 
 	@Test
 	public void testSimpleValidHorizontalToEastWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 2, new Point(4, 3), new Point(4, 4)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(4, 5), carIdentifier));
 	}
 
@@ -44,7 +46,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidHorizontalToEastWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 3, new Point(1, 1), new Point(1, 3)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(1, 5), carIdentifier));
 	}
 
@@ -52,7 +54,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidHorizontalToEastWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 2, new Point(4, 3), new Point(4, 4)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(4, 7), carIdentifier));
 	}
 
@@ -60,7 +62,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidHorizontalToEastWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 3, new Point(1, 1), new Point(1, 3)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(0, 4), carIdentifier));
 	}
 
@@ -68,7 +70,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidHorizontalToWestWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 2, new Point(2, 2), new Point(2, 3)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(2, 0), carIdentifier));
 	}
 
@@ -76,7 +78,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidHorizontalToWestWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 3, new Point(0, 3), new Point(0, 5)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(0, 0), carIdentifier));
 	}
 
@@ -84,7 +86,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidHorizontalToWestWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 2, new Point(5, 2), new Point(5, 3)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(-1, 2), carIdentifier));
 	}
 
@@ -92,7 +94,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidHorizontalToWestWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.HORIZONTAL, 3, new Point(2, 3), new Point(2, 5)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(3, 1), carIdentifier));
 	}
 
@@ -100,7 +102,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidVerticalToNorthWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 2, new Point(4, 5), new Point(5, 5)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(3, 5), carIdentifier));
 	}
 
@@ -108,7 +110,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidVerticalToNorthWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 3, new Point(1, 4), new Point(3, 4)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(0, 4), carIdentifier));
 	}
 
@@ -116,7 +118,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidVerticalToNorthWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 2, new Point(3, 2), new Point(4, 2)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(-1, 1), carIdentifier));
 	}
 
@@ -124,7 +126,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidVerticalToNorthWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 3, new Point(0, 5), new Point(2, 5)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(-1, 0), carIdentifier));
 	}
 
@@ -132,7 +134,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidVerticalToSouthWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 2, new Point(2, 0), new Point(3, 0)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(4, 0), carIdentifier));
 	}
 
@@ -140,7 +142,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleValidVerticalToSouthWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 3, new Point(2, 1), new Point(4, 1)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.canNeighborMoveHere(new Point(5, 1), carIdentifier));
 	}
 
@@ -148,7 +150,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidVerticalToSouthWithSizeTwoVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 2, new Point(2, 0), new Point(3, 0)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(Constants.BOARD_SIZE + 1, 0), carIdentifier));
 	}
 
@@ -156,7 +158,7 @@ public class TestCanNeighborMoveHere {
 	public void testSimpleInValidVerticalToSouthWithSizeThreeVehicleMovement() {
 		vehiclesMap.put(carIdentifier,
 				TestsUtils.getVehicle(carIdentifier, Constants.VERTICAL, 3, new Point(2, 1), new Point(4, 1)));
-		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(emptySpots, vehiclesMap, puzzleID, 1, 0, 0);
 		assertFalse(currentSearchNode.canNeighborMoveHere(new Point(Constants.BOARD_SIZE, 1), carIdentifier));
 	}
 }

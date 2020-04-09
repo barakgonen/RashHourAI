@@ -66,7 +66,7 @@ public class TestSuccessor {
 				TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(4, 3), new Point(5, 3)));
 
 		AStarSearchNode firstSuccessor = new AStarSearchNode(firstSuccessorExpectedEmptySpots,
-				firstSuccessorVehiclesMap, puzzleID, 1);
+				firstSuccessorVehiclesMap, puzzleID, 1, 1, 1);
 
 		// Second Successor
 		Set<Point> secondSuccessorExpectedEmptySpots = new HashSet<>();
@@ -105,7 +105,7 @@ public class TestSuccessor {
 				TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(3, 3), new Point(4, 3)));
 
 		AStarSearchNode secondSuccessor = new AStarSearchNode(secondSuccessorExpectedEmptySpots,
-				secondSuccessorVehiclesMap, puzzleID, 2);
+				secondSuccessorVehiclesMap, puzzleID, 2, 1, 1);
 
 		// Third Successor
 		Set<Point> thirdSuccessorExpectedEmptySpots = new HashSet<>();
@@ -144,7 +144,7 @@ public class TestSuccessor {
 				TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(3, 3), new Point(4, 3)));
 
 		AStarSearchNode thirdtSuccessor = new AStarSearchNode(thirdSuccessorExpectedEmptySpots,
-				thirdSuccessorVehiclesMap, puzzleID, 3);
+				thirdSuccessorVehiclesMap, puzzleID, 3, 1, 1);
 
 		successors.add(firstSuccessor);
 		successors.add(secondSuccessor);
@@ -247,23 +247,123 @@ public class TestSuccessor {
 	}
 
 	@Test
-	public void testGeneratingExpectedNumberOfSuccessors() {
-		// This code should be long and "not smart", we manually generate successors for
-		// a specific state - start node of specific puzzle
-		assertEquals(3, searchNode.getSuccessors().size());
+	public void testMovingOneStepEast() {
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('X', new Point(2, 4), 1);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(2, 4));
+		expectedEmptySpots.add(new Point(2, 2));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(2, 3), actualNextStep.getVehicleByID('X').getStartPos());
+		assertEquals(new Point(2, 4), actualNextStep.getVehicleByID('X').getEndPos());
+
+		expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		actualNextStep = searchNode.getNextState('C', new Point(1, 4), 1);
+		actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(1, 4));
+		expectedEmptySpots.add(new Point(1, 2));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(1, 3), actualNextStep.getVehicleByID('C').getStartPos());
+		assertEquals(new Point(1, 4), actualNextStep.getVehicleByID('C').getEndPos());
 	}
 
 	@Test
-	public void testGeneratingSuccessorsForSpecificCaseAsExpected() {
-		// This code should be long and "not smart", we manually generate successors for
-		// a specific state - start node of specific puzzle
-		List<AStarSearchNode> expectedSuccessors = getSuccessors().stream().collect(Collectors.toList());
-		expectedSuccessors.sort(Comparator.comparing(AStarSearchNode::getSuccessorIndex));
+	public void testMovingOneStepWest() {
+		rawPuzzleObject = new RawPuzzleObject("..ABB...A.J..DXXJ..DEEF..OOOF.......", 2);
+		searchNode = new AStarSearchNode(rawPuzzleObject);
 
-		List<AStarSearchNode> actualSuccessors = searchNode.getSuccessors().stream().collect(Collectors.toList());
-		actualSuccessors.sort(Comparator.comparing(AStarSearchNode::getSuccessorIndex));
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('O', new Point(4, 0), 1);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
 
-		assertEquals(expectedSuccessors, actualSuccessors);
+		expectedEmptySpots.remove(new Point(4, 0));
+		expectedEmptySpots.add(new Point(4, 3));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(4, 0), actualNextStep.getVehicleByID('O').getStartPos());
+		assertEquals(new Point(4, 2), actualNextStep.getVehicleByID('O').getEndPos());
+	}
+
+	@Test
+	public void testMovingOneStepNorth() {
+		rawPuzzleObject = new RawPuzzleObject("..ABB...A.J..DXXJ..DEEF..OOOF.......", 2);
+		searchNode = new AStarSearchNode(rawPuzzleObject);
+
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('D', new Point(0, 1), 1);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(0, 1));
+		expectedEmptySpots.remove(new Point(1, 1));
+		expectedEmptySpots.add(new Point(2, 1));
+		expectedEmptySpots.add(new Point(3, 1));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(0, 1), actualNextStep.getVehicleByID('D').getStartPos());
+		assertEquals(new Point(1, 1), actualNextStep.getVehicleByID('D').getEndPos());
+	}
+
+	@Test
+	public void testMovingOneStepSouth() {
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('D', new Point(5, 3), 1);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(5, 3));
+		expectedEmptySpots.add(new Point(3, 3));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(4, 3), actualNextStep.getVehicleByID('D').getStartPos());
+		assertEquals(new Point(5, 3), actualNextStep.getVehicleByID('D').getEndPos());
+	}
+
+	@Test
+	public void testMovingTwoStepsEast() {
+		rawPuzzleObject = new RawPuzzleObject("..AOOO..AB..XXCB.RDDCEERFGHH.RFGII..", 4);
+		searchNode = new AStarSearchNode(rawPuzzleObject);
+
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('I', new Point(5, 5), 2);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(5, 4));
+		expectedEmptySpots.remove(new Point(5, 5));
+		expectedEmptySpots.add(new Point(5, 2));
+		expectedEmptySpots.add(new Point(5, 3));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(5, 4), actualNextStep.getVehicleByID('I').getStartPos());
+		assertEquals(new Point(5, 5), actualNextStep.getVehicleByID('I').getEndPos());
+	}
+
+	@Test
+	public void testMovingTwoStepsWest() {
+		rawPuzzleObject = new RawPuzzleObject("A..RRRA..B.PXX.BCPQQQDCP..EDFFIIEHH.", 3);
+		searchNode = new AStarSearchNode(rawPuzzleObject);
+
+		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
+		AStarSearchNode actualNextStep = searchNode.getNextState('R', new Point(0, 1), 2);
+		List<Point> actualEmptySpots = actualNextStep.getEmptySpots().stream().collect(Collectors.toList());
+		actualEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+
+		expectedEmptySpots.remove(new Point(0, 1));
+		expectedEmptySpots.remove(new Point(0, 2));
+		expectedEmptySpots.add(new Point(0, 4));
+		expectedEmptySpots.add(new Point(0, 5));
+		expectedEmptySpots.sort(Comparator.comparingDouble(p -> p.distance(0, 0)));
+		assertEquals(expectedEmptySpots, actualEmptySpots);
+		assertEquals(new Point(0, 1), actualNextStep.getVehicleByID('R').getStartPos());
+		assertEquals(new Point(0, 3), actualNextStep.getVehicleByID('R').getEndPos());
 	}
 
 	@Test

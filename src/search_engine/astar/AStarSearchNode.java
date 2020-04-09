@@ -1,6 +1,7 @@
 package search_engine.astar;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,29 +25,34 @@ public class AStarSearchNode {
 	protected double heuristicValue;
 	protected int numberOfMoves;
 	protected double evaluationFunc;
-	protected int id = 1; // Think about it, it's not relevant to any A*, just for specific
 	protected Collection<Point> emptySpots;
 	protected HashMap<Character, Vehicle> vehicles;
 	final protected int puzzleID;
 	protected final int successorIndex;
+	protected final int boardIdentifier;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
-		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0);
+		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0, 0, 0);
 	}
 
 	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
-			int successorIndex) {
+			int successorIndex, int numberOfMoves, int depthInGraph) {
 		this.emptySpots = emptySpots;
 		this.vehicles = vehicles;
 		this.puzzleID = puzzleID;
 		this.parent = null;
 		this.successorIndex = successorIndex;
+		heuristicValue = HeuristicFunCalculator.getCalculatedHeuristicValueForState(this.vehicles.values());
+		this.numberOfMoves = numberOfMoves;
+		this.evaluationFunc = this.heuristicValue + this.numberOfMoves;
+		this.depthInGraph = depthInGraph;
+		this.boardIdentifier = this.generateStateIdentifier();
 	}
 
 	private AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
 			AStarSearchNode parentNode, int successorIndex) {
-		this(emptySpots, vehicles, puzzleID, successorIndex);
-		parent = parentNode;
+		this(emptySpots, vehicles, puzzleID, successorIndex, parentNode.numberOfMoves + 1, parentNode.depthInGraph + 1);
+		this.parent = parentNode;
 	}
 
 	public boolean isGoalNode() {
@@ -56,17 +62,25 @@ public class AStarSearchNode {
 	public Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
 		int successorIndex = 0;
-		for (Point emptySpot : emptySpots) {
-			for (Character carIdentifier : getNeighbors(emptySpot)) {
-				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
-					List<Point> newEmptySpots = emptySpots.stream().collect(Collectors.toList());
-					HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet()
-							.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-					successors.add(new AStarSearchNode(newEmptySpots, newVehicleMap, puzzleID, this, ++successorIndex));
-				}
-			}
-		}
+		for (Point emptySpot : emptySpots)
+			for (Character carIdentifier : getNeighbors(emptySpot))
+				if (canNeighborMoveHere(emptySpot, carIdentifier))
+					successors.add(getNextState(carIdentifier, emptySpot, ++successorIndex));
 		return successors;
+	}
+
+	public AStarSearchNode getNextState(Character carToMoveID, Point destenationToMove, int successorIndex) {
+		List<Point> newEmptySpots = emptySpots.stream().collect(Collectors.toList());
+		HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+		Vehicle updatedVehicle = vehicles.get(carToMoveID);
+
+		newEmptySpots.remove(destenationToMove);
+		Collection<Point> newEmptyPoints = updatedVehicle.moveVehicle(destenationToMove);
+		newEmptySpots.addAll(newEmptyPoints);
+		newEmptySpots.removeAll(updatedVehicle.getLocations());
+		return new AStarSearchNode(newEmptySpots, newVehicleMap, puzzleID, this, successorIndex);
 	}
 
 	private Set<Character> getNeighbors(Point currentEmptySpot) {
@@ -113,27 +127,22 @@ public class AStarSearchNode {
 
 	public boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
 		Vehicle neighborVehicle = vehicles.get(carIdentifier);
-		if (neighborVehicle != null) {
-			if (neighborVehicle.getOrientation() == Constants.HORIZONTAL)
-				return (emptySpot.getX() == neighborVehicle.getStartPos().getX()
-						&& (emptySpot.getX() == neighborVehicle.getEndPos().getX()))
-						&& (0 <= (int) emptySpot.getY() && (int) emptySpot.getY() < Constants.BOARD_SIZE);
-			else
-				return (emptySpot.getY() == neighborVehicle.getStartPos().getY()
-						&& (emptySpot.getY() == neighborVehicle.getEndPos().getY()))
-						&& (0 <= (int) emptySpot.getX() && (int) emptySpot.getX() < Constants.BOARD_SIZE);
-		} else {
-			System.out.println("BBBBBBBBBBB id is: " + carIdentifier.charValue());
-			return false;
-		}
+		if (neighborVehicle.getOrientation() == Constants.HORIZONTAL)
+			return (emptySpot.getX() == neighborVehicle.getStartPos().getX()
+					&& (emptySpot.getX() == neighborVehicle.getEndPos().getX()))
+					&& (0 <= (int) emptySpot.getY() && (int) emptySpot.getY() < Constants.BOARD_SIZE);
+		else
+			return (emptySpot.getY() == neighborVehicle.getStartPos().getY()
+					&& (emptySpot.getY() == neighborVehicle.getEndPos().getY()))
+					&& (0 <= (int) emptySpot.getX() && (int) emptySpot.getX() < Constants.BOARD_SIZE);
 	}
 
 	public double getEvaluationFunc() {
 		return evaluationFunc;
 	}
 
-	public long getId() {
-		return id;
+	public int getUUID() {
+		return 5;
 	}
 
 	public double getHeuristicsValue() {
@@ -150,11 +159,50 @@ public class AStarSearchNode {
 
 	@Override
 	public boolean equals(Object o) {
-		return true;
+		return this.depthInGraph == ((AStarSearchNode) o).depthInGraph
+				&& this.heuristicValue == ((AStarSearchNode) o).heuristicValue
+				&& this.numberOfMoves == ((AStarSearchNode) o).numberOfMoves
+				&& this.evaluationFunc == ((AStarSearchNode) o).evaluationFunc
+				&& this.emptySpots.equals(((AStarSearchNode) o).emptySpots)
+				&& this.vehicles.equals(((AStarSearchNode) o).vehicles)
+				&& this.puzzleID == ((AStarSearchNode) o).puzzleID
+				&& this.successorIndex == ((AStarSearchNode) o).successorIndex
+				&& ((this.parent != null && ((AStarSearchNode) o).parent != null)
+						? this.parent.equals(((AStarSearchNode) o).parent)
+						: true);
+	}
+
+	@Override
+	public int hashCode() {
+		return boardIdentifier;
 	}
 
 	public int getSuccessorIndex() {
 		return successorIndex;
+	}
+
+	private int generateStateIdentifier() {
+		List<Integer> evaluationLst = new ArrayList<>();
+
+		for (int i = 0; i < Constants.BOARD_SIZE; i++) {
+			for (int j = 0; j < Constants.BOARD_SIZE; j++) {
+				Point currentPoint = new Point(i, j);
+				Character identifier = getCarIdentifier(currentPoint);
+				int val = (int) Constants.STATIC_POINT_TO_VALUE.get(currentPoint);
+				int multiplyFactor = ((identifier + 1) - 'A');
+				evaluationLst.add(val * multiplyFactor);
+			}
+		}
+		return evaluationLst.stream().collect(Collectors.summingInt(Integer::intValue));
+	}
+
+	// remove me
+	public Collection<Point> getEmptySpots() {
+		return emptySpots;
+	}
+
+	public Vehicle getVehicleByID(Character id) {
+		return vehicles.get(id);
 	}
 
 //	/*

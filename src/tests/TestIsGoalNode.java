@@ -23,7 +23,7 @@ class TestIsGoalNode {
 						new Point(Constants.EXIT_RAW, Constants.BOARD_SIZE - 2),
 						new Point(Constants.EXIT_RAW, Constants.BOARD_SIZE - 1)));
 		int puzzleID = 1;
-		AStarSearchNode currentSearchNode = new AStarSearchNode(Collections.emptyList(), vehicles, puzzleID, 1);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(Collections.emptyList(), vehicles, puzzleID, 1, 0, 0);
 		assertTrue(currentSearchNode.isGoalNode());
 	}
 
@@ -35,7 +35,7 @@ class TestIsGoalNode {
 						new Point(Constants.EXIT_RAW, Constants.BOARD_SIZE - 3),
 						new Point(Constants.EXIT_RAW, Constants.BOARD_SIZE - 2)));
 		int puzzleID = 1;
-		AStarSearchNode currentSearchNode = new AStarSearchNode(Collections.emptyList(), vehicles, puzzleID, 2);
+		AStarSearchNode currentSearchNode = new AStarSearchNode(Collections.emptyList(), vehicles, puzzleID, 2, 0, 0);
 		assertFalse(currentSearchNode.isGoalNode());
 	}
 }

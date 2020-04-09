@@ -1,5 +1,6 @@
 package search_engine.astar;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 import search_engine.FibonacciHeap;
@@ -7,8 +8,8 @@ import search_engine.FibonacciHeap;
 public class AStar {
 
 	protected FibonacciHeap<AStarSearchNode> openList;
-	protected HashMap<Long, AStarSearchNode> ndOpenList;
-	protected HashMap<Long, AStarSearchNode> closedList;
+	protected HashMap<Integer, AStarSearchNode> ndOpenList;
+	protected HashMap<Integer, AStarSearchNode> closedList;
 	protected AStarSearchNode prev;
 	protected AStarSolutionStatisticsData solutionStatisticsData;
 
@@ -33,13 +34,13 @@ public class AStar {
 	public SolvedAstarPuzzle getBestSolution(AStarSearchNode startNode) {
 		solutionStatisticsData = new AStarSolutionStatisticsData(startNode.getPuzzleID());
 		openList.enqueue(startNode, startNode.getEvaluationFunc());
-		ndOpenList.put(startNode.getId(), startNode);
+		ndOpenList.put(startNode.getUUID(), startNode);
 
 		AStarSearchNode bestGoal = null;
 		int nodesCounter = 0;
 		while (!openList.isEmpty()) {
 			AStarSearchNode currentNode = openList.min().getValue();
-			if (ndOpenList.containsKey(currentNode.getId()) && shouldNotExpandNode(currentNode)) {
+			if (ndOpenList.containsKey(currentNode.getUUID()) && shouldNotExpandNode(currentNode)) {
 				openList.dequeueMin();
 				continue;
 			}
@@ -70,27 +71,29 @@ public class AStar {
 			prev = currentNode;
 
 			openList.dequeueMin();
-			ndOpenList.remove(currentNode.getId());
-			closedList.put(currentNode.getId(), currentNode);
+			ndOpenList.remove(currentNode.getUUID());
+			closedList.put(currentNode.getUUID(), currentNode);
 
 			if (currentNode.isGoalNode()) {
 				continue;
 			}
 
 			// loop for working on hash tables, open and closed lists to work with nodes
-			for (AStarSearchNode successorNode : currentNode.getSuccessors()) {
-				if (closedList.containsKey(successorNode.getId())) {
+			Collection<AStarSearchNode> successors = currentNode.getSuccessors();
+			for (AStarSearchNode successorNode : successors) {
+				if (closedList.containsKey(successorNode.getUUID())) {
 					continue;
 				}
 
-				if (!ndOpenList.containsKey(successorNode.getId())) {
+				if (!ndOpenList.containsKey(successorNode.getUUID())) {
 					openList.enqueue(successorNode, successorNode.getEvaluationFunc());
-					ndOpenList.put(successorNode.getId(), successorNode);
+					ndOpenList.put(successorNode.getUUID(), successorNode);
 				} else {
-					if (successorNode.getEvaluationFunc() < ndOpenList.get(successorNode.getId()).getEvaluationFunc()) {
+					if (successorNode.getEvaluationFunc() < ndOpenList.get(successorNode.getUUID())
+							.getEvaluationFunc()) {
 						nodesCounter++;
 						openList.enqueue(successorNode, successorNode.getEvaluationFunc());
-						ndOpenList.replace(successorNode.getId(), successorNode);
+						ndOpenList.replace(successorNode.getUUID(), successorNode);
 					}
 				}
 			}
@@ -110,6 +113,6 @@ public class AStar {
 	}
 
 	private boolean shouldNotExpandNode(AStarSearchNode currentNode) {
-		return ndOpenList.get(currentNode.getId()).getEvaluationFunc() < currentNode.getEvaluationFunc();
+		return ndOpenList.get(currentNode.getUUID()).getEvaluationFunc() < currentNode.getEvaluationFunc();
 	}
 }

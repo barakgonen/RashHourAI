@@ -22,6 +22,11 @@ public final class HeuristicFunCalculator {
 	private HeuristicFunCalculator() {
 	}
 
+	public static int getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
+		return numberOfBlockingVehicles(vehicles) + targetVehiclDistanceFromExit(vehicles.stream()
+				.filter(v -> v.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER).findFirst().get());
+	}
+
 	/**
 	 * This heuristic calculates the minimum number of actions we have to perform in
 	 * order to get to goal node. our goal node is a node which the target vehicle
