@@ -31,11 +31,7 @@ public class AStarSearchNode {
 	protected final int successorIndex;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
-		emptySpots = obj.getEmptySpots();
-		vehicles = obj.getVehiclesMapping();
-		puzzleID = obj.getPuzzleId();
-		this.parent = null;
-		successorIndex = 0;
+		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0);
 	}
 
 	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
@@ -49,18 +45,14 @@ public class AStarSearchNode {
 
 	private AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
 			AStarSearchNode parentNode, int successorIndex) {
-		this.emptySpots = emptySpots;
-		this.vehicles = vehicles;
-		this.puzzleID = puzzleID;
+		this(emptySpots, vehicles, puzzleID, successorIndex);
 		parent = parentNode;
-		this.successorIndex = successorIndex;
 	}
 
 	public boolean isGoalNode() {
 		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().equals(Constants.GOAL_STATE_POS);
 	}
 
-	// 2. Implement successor
 	public Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
 		int successorIndex = 0;
