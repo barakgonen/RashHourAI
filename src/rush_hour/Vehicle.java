@@ -77,8 +77,22 @@ public class Vehicle {
 				&& orientation == comp.orientation && identifier == comp.identifier;
 	}
 
+	private boolean isHorizontalIntersection(Point pnt) {
+		return ((pnt.getX() == startPos.getX()) && (pnt.getX() == endPos.getX()))
+				&& (startPos.getY() < pnt.getY() && pnt.getY() < endPos.getY());
+	}
+
+	private boolean isVerticalIntersection(Point pnt) {
+		return ((pnt.getY() == startPos.getY()) && (pnt.getY() == endPos.getY()))
+				&& (startPos.getX() < pnt.getX() && pnt.getX() < endPos.getX());
+	}
+
+	private boolean isPointIntersectsWithTruck(Point pnt) {
+		return (orientation == Constants.HORIZONTAL ? isHorizontalIntersection(pnt) : isVerticalIntersection(pnt));
+	}
+
 	public boolean isPointIntersectsWithMe(Point pnt) {
-		return (startPos.getX() <= pnt.getX() && pnt.getX() <= endPos.getX())
-				|| (endPos.getX() <= pnt.getX() && pnt.getX() <= endPos.getX());
+		return startPos.equals(pnt) || endPos.equals(pnt)
+				|| (size == Constants.TRUCK_SIZE ? isPointIntersectsWithTruck(pnt) : false);
 	}
 }

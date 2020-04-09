@@ -7,6 +7,8 @@ import java.util.stream.IntStream;
 
 public final class Constants {
 	public static final int BOARD_SIZE = 6;
+	public static final int CAR_SIZE = 2;
+	public static final int TRUCK_SIZE = 3;
 	public static final int EXIT_RAW = BOARD_SIZE / 3; // In assignment it says in the upper 1/3 of the board, means raw
 														// 2
 	public static final char TARGET_VEHICLE_IDENTIFIER = 'X';

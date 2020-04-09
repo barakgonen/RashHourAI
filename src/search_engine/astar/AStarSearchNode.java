@@ -4,7 +4,10 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import rush_hour.Constants;
 import rush_hour.RawPuzzleObject;
@@ -25,34 +28,49 @@ public class AStarSearchNode {
 	protected Collection<Point> emptySpots;
 	protected HashMap<Character, Vehicle> vehicles;
 	final protected int puzzleID;
+	protected final int successorIndex;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
 		emptySpots = obj.getEmptySpots();
 		vehicles = obj.getVehiclesMapping();
 		puzzleID = obj.getPuzzleId();
+		this.parent = null;
+		successorIndex = 0;
 	}
 
-	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID) {
+	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
+			int successorIndex) {
 		this.emptySpots = emptySpots;
 		this.vehicles = vehicles;
 		this.puzzleID = puzzleID;
+		this.parent = null;
+		this.successorIndex = successorIndex;
+	}
+
+	private AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
+			AStarSearchNode parentNode, int successorIndex) {
+		this.emptySpots = emptySpots;
+		this.vehicles = vehicles;
+		this.puzzleID = puzzleID;
+		parent = parentNode;
+		this.successorIndex = successorIndex;
 	}
 
 	public boolean isGoalNode() {
 		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().equals(Constants.GOAL_STATE_POS);
 	}
 
-	// 2. test canNeighborMoveHere
 	// 2. Implement successor
 	public Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
+		int successorIndex = 0;
 		for (Point emptySpot : emptySpots) {
 			for (Character carIdentifier : getNeighbors(emptySpot)) {
 				if (canNeighborMoveHere(emptySpot, carIdentifier)) {
-//					successors.add(new AStarSearchNode());
-					// Implement successor
-					// Need to construct new AStarSearchNode with new board order - new emptySpots &
-					// new vehicles position according to movement
+					List<Point> newEmptySpots = emptySpots.stream().collect(Collectors.toList());
+					HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet()
+							.stream().collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+					successors.add(new AStarSearchNode(newEmptySpots, newVehicleMap, puzzleID, this, ++successorIndex));
 				}
 			}
 		}
@@ -65,53 +83,57 @@ public class AStarSearchNode {
 		toReturn.add(getSouthestNeighbor(currentEmptySpot));
 		toReturn.add(getEastestNeighbor(currentEmptySpot));
 		toReturn.add(getWestestNeighbor(currentEmptySpot));
-		return toReturn;
+		return toReturn.stream().filter(c -> c != Constants.UKNOWN_IDENTIFIER).collect(Collectors.toSet());
 	}
 
-	private Character getCarIdentifier(Point currentEmptySpot) {
+	public Character getCarIdentifier(Point currentEmptySpot) {
 		return vehicles.keySet().stream().filter(v -> vehicles.get(v).isPointIntersectsWithMe(currentEmptySpot))
 				.findAny().orElse(Constants.UKNOWN_IDENTIFIER);
 	}
 
-	private Character getNorthestNeighbor(Point currentEmptySpot) {
+	public Character getNorthestNeighbor(Point currentEmptySpot) {
 		Character carIdentifier = getCarIdentifier(currentEmptySpot);
 		if (currentEmptySpot.getX() <= 0 || carIdentifier != Constants.UKNOWN_IDENTIFIER)
 			return carIdentifier;
 		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX() - 1, (int) currentEmptySpot.getY()));
 	}
 
-	private Character getSouthestNeighbor(Point currentEmptySpot) {
+	public Character getSouthestNeighbor(Point currentEmptySpot) {
 		Character carIdentifier = getCarIdentifier(currentEmptySpot);
 		if (currentEmptySpot.getX() > Constants.BOARD_SIZE || carIdentifier != Constants.UKNOWN_IDENTIFIER)
 			return carIdentifier;
-		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX() + 1, (int) currentEmptySpot.getY()));
+		return getSouthestNeighbor(new Point((int) currentEmptySpot.getX() + 1, (int) currentEmptySpot.getY()));
 	}
 
-	private Character getEastestNeighbor(Point currentEmptySpot) {
+	public Character getEastestNeighbor(Point currentEmptySpot) {
 		Character carIdentifier = getCarIdentifier(currentEmptySpot);
-		if (currentEmptySpot.getY() < Constants.BOARD_SIZE || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+		if (currentEmptySpot.getY() >= Constants.BOARD_SIZE || carIdentifier != Constants.UKNOWN_IDENTIFIER)
 			return carIdentifier;
-		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() + 1));
+		return getEastestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() + 1));
 	}
 
-	private Character getWestestNeighbor(Point currentEmptySpot) {
+	public Character getWestestNeighbor(Point currentEmptySpot) {
 		Character carIdentifier = getCarIdentifier(currentEmptySpot);
-		if (currentEmptySpot.getY() >= 0 || carIdentifier != Constants.UKNOWN_IDENTIFIER)
+		if (currentEmptySpot.getY() <= 0 || carIdentifier != Constants.UKNOWN_IDENTIFIER)
 			return carIdentifier;
-		return getNorthestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() - 1));
+		return getWestestNeighbor(new Point((int) currentEmptySpot.getX(), (int) currentEmptySpot.getY() - 1));
 	}
 
-	private boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
+	public boolean canNeighborMoveHere(Point emptySpot, Character carIdentifier) {
 		Vehicle neighborVehicle = vehicles.get(carIdentifier);
-		if ((emptySpot.getX() == neighborVehicle.getStartPos().getX())
-				&& (emptySpot.getX() == neighborVehicle.getEndPos().getX())) {
-			return true;
+		if (neighborVehicle != null) {
+			if (neighborVehicle.getOrientation() == Constants.HORIZONTAL)
+				return (emptySpot.getX() == neighborVehicle.getStartPos().getX()
+						&& (emptySpot.getX() == neighborVehicle.getEndPos().getX()))
+						&& (0 <= (int) emptySpot.getY() && (int) emptySpot.getY() < Constants.BOARD_SIZE);
+			else
+				return (emptySpot.getY() == neighborVehicle.getStartPos().getY()
+						&& (emptySpot.getY() == neighborVehicle.getEndPos().getY()))
+						&& (0 <= (int) emptySpot.getX() && (int) emptySpot.getX() < Constants.BOARD_SIZE);
+		} else {
+			System.out.println("BBBBBBBBBBB id is: " + carIdentifier.charValue());
+			return false;
 		}
-		if ((emptySpot.getY() == neighborVehicle.getStartPos().getY())
-				&& (emptySpot.getY() == neighborVehicle.getEndPos().getY())) {
-			return true;
-		}
-		return false;
 	}
 
 	public double getEvaluationFunc() {
@@ -137,6 +159,10 @@ public class AStarSearchNode {
 	@Override
 	public boolean equals(Object o) {
 		return true;
+	}
+
+	public int getSuccessorIndex() {
+		return successorIndex;
 	}
 
 //	/*
