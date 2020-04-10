@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -18,11 +19,12 @@ import rush_hour.Vehicle;
  */
 public final class HeuristicFunCalculator {
 	public static Logger LOGGER = Logger.getLogger(Main.class.getName());
+	private static Random rnd = new Random();
 
 	private HeuristicFunCalculator() {
 	}
 
-	public static int getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
+	public static double getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
 		return numberOfBlockingVehicles(vehicles) + targetVehiclDistanceFromExit(vehicles.stream()
 				.filter(v -> v.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER).findFirst().get());
 	}

@@ -92,10 +92,11 @@ public class AStarSearchNode {
 				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new Vehicle(valueMapper.getValue())));
 
 		Vehicle updatedVehicle = newVehicleMap.get(carToMoveID);
-		// Here you do know which vehicle should go to where!
-		Movement movement = new Movement(new Point(updatedVehicle.getStartPos()), new Point(destenationToMove),
-				carToMoveID, updatedVehicle.getOrientation());
+		Point oldStartPoint = new Point(updatedVehicle.getStartPos());
 		Collection<Point> newEmptyPoints = updatedVehicle.moveVehicle(destenationToMove);
+		// Here you do know which vehicle should go to where!
+		Movement movement = new Movement(oldStartPoint, new Point(updatedVehicle.getStartPos()), carToMoveID,
+				updatedVehicle.getOrientation());
 		newEmptySpots.addAll(newEmptyPoints);
 		newEmptySpots.removeAll(updatedVehicle.getLocations());
 		return new AStarSearchNode(newEmptySpots, (HashMap<Character, Vehicle>) newVehicleMap, puzzleID, this,

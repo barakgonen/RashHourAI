@@ -17,9 +17,9 @@ public class Movement {
 			movementSize = Math.abs((int) (oldStartPos.getY() - newStartPos.getY()));
 		} else {
 			if (oldStartPos.getX() < newStartPos.getX())
-				movementDirection = Direction.U;
-			else
 				movementDirection = Direction.D;
+			else
+				movementDirection = Direction.U;
 			movementSize = Math.abs((int) (oldStartPos.getX() - newStartPos.getX()));
 		}
 	}
