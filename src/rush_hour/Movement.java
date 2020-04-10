@@ -11,15 +11,15 @@ public class Movement {
 		vehicleIdentifier = vehicleID;
 		if (vehicleOrientation == Constants.HORIZONTAL) {
 			if (oldStartPos.getY() < newStartPos.getY())
-				movementDirection = Direction.E;
+				movementDirection = Direction.R;
 			else
-				movementDirection = Direction.W;
+				movementDirection = Direction.L;
 			movementSize = Math.abs((int) (oldStartPos.getY() - newStartPos.getY()));
 		} else {
 			if (oldStartPos.getX() < newStartPos.getX())
-				movementDirection = Direction.N;
+				movementDirection = Direction.U;
 			else
-				movementDirection = Direction.S;
+				movementDirection = Direction.D;
 			movementSize = Math.abs((int) (oldStartPos.getX() - newStartPos.getX()));
 		}
 	}

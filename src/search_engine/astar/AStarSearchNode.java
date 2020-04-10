@@ -104,10 +104,10 @@ public class AStarSearchNode {
 
 	private Set<Character> getNeighbors(Point currentEmptySpot) {
 		Set<Character> toReturn = new HashSet<>();
+		toReturn.add(getWestestNeighbor(currentEmptySpot));
+		toReturn.add(getEastestNeighbor(currentEmptySpot));
 		toReturn.add(getNorthestNeighbor(currentEmptySpot));
 		toReturn.add(getSouthestNeighbor(currentEmptySpot));
-		toReturn.add(getEastestNeighbor(currentEmptySpot));
-		toReturn.add(getWestestNeighbor(currentEmptySpot));
 		return toReturn.stream().filter(c -> c != Constants.UKNOWN_IDENTIFIER).collect(Collectors.toSet());
 	}
 
@@ -203,7 +203,7 @@ public class AStarSearchNode {
 				Point currentPoint = new Point(i, j);
 				Character identifier = getCarIdentifier(currentPoint);
 				int val = (int) Constants.STATIC_POINT_TO_VALUE.get(currentPoint);
-				int multiplyFactor = ((identifier + 1) - 'A');
+				int multiplyFactor = (identifier.charValue() == ' ') ? 32 : ((identifier + 1) - 'A');
 				evaluationLst.add(val * multiplyFactor);
 			}
 		}
@@ -242,77 +242,4 @@ public class AStarSearchNode {
 		puzzleSolution += " END";
 		return puzzleSolution;
 	}
-
-//	/*
-//	 * this method is for printing the solution moves, by going up to the parent
-//	 * each time.
-//	 * 
-//	 * @start - the father / not neccessary can be done untill null found.
-//	 * 
-//	 * @bestGoal - the best board solution
-//	 */
-//
-//	public void printSolution(Node start, Node bestGoal) {
-//		Node currentw = new Node(bestGoal);
-//		Node parent;
-//		ArrayList<String> moves = new ArrayList<String>();
-//		while (currentw.getId() != start.getId()) {
-//
-//			StringBuilder sb = new StringBuilder();
-//			int index = 0;
-//			char carSymbol;
-//			char direction;
-//			int carOrient;
-//			int steps = 0;
-//			String move;
-//			parent = currentw.getParent();
-//			if (parent == null)
-//				break;
-//			for (int i = 0; i < currentw.getPuz().getNumOfCars(); i++) {
-//
-//				if (currentw.getPuz().getcPosition()[i] != parent.getPuz().getcPosition()[i]) {
-//					index = i;
-//					steps = Math.abs(currentw.getPuz().getcPosition()[i] - parent.getPuz().getcPosition()[i]);
-//
-//				}
-//			}
-//			carSymbol = currentw.getPuz().getCarSymbol()[index];
-//			carOrient = currentw.getPuz().getCarOrient()[index];
-//
-//			if (carOrient == 1) {
-//				if (currentw.getPuz().getcPosition()[index] > parent.getPuz().getcPosition()[index])
-//					direction = 'D';
-//				else
-//					direction = 'U';
-//
-//			} else {
-//				if (currentw.getPuz().getcPosition()[index] > parent.getPuz().getcPosition()[index])
-//					direction = 'R';
-//				else
-//					direction = 'L';
-//			}
-//
-//			sb.append(carSymbol);
-//			sb.append(direction);
-//			sb.append(steps);
-//			sb.append(' ');
-//			move = sb.toString();
-//
-//			moves.add(move);
-//			currentw = parent;
-//		}
-//		int countX = 0;
-//		while ((bestGoal.getPuz().getcPosition()[0] + countX) < bestGoal.getPuz().getSize()) {
-//			countX++;
-//		}
-//
-//		for (int i = moves.size() - 1; 0 <= i; i--) {
-//			System.out.print(moves.get(i));
-//
-//		}
-//
-//		System.out.print("XR" + countX);
-//
-//		System.out.println();
-//	}
 }
