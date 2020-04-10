@@ -40,6 +40,7 @@ public class AStar {
 		int nodesCounter = 0;
 		while (!openList.isEmpty()) {
 			AStarSearchNode currentNode = openList.min().getValue();
+			solutionStatisticsData.setNumberOfPassedMoves(currentNode.getNumberOfPassedMoves());
 			if (ndOpenList.containsKey(currentNode.getUUID()) && shouldNotExpandNode(currentNode)) {
 				openList.dequeueMin();
 				continue;
@@ -100,14 +101,15 @@ public class AStar {
 		}
 		solutionStatisticsData.setNumberOfNodes(solutionStatisticsData.getNumberOfNodes() - nodesCounter);
 		solutionStatisticsData.calculateFinalData();
-
-		if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000) {
-			System.out.println("FAILED solving puzzle: " + startNode.getPuzzleID());
-			return null;
-		} else if (bestGoal == null) {
+		if (bestGoal == null) {
 			System.out.println("No Solution for puzzle: " + startNode.getPuzzleID());
 			return null;
 		}
+
+		else if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000)
+			System.out.println("FAILED solving puzzle: " + startNode.getPuzzleID());
+		else
+			System.out.println("Solved puzzle!");
 
 		return new SolvedAstarPuzzle(bestGoal, solutionStatisticsData);
 	}

@@ -2,7 +2,7 @@ package search_engine.statistics_calculator;
 
 public class GeneralSolutionStatisticsData implements SolutionStatisticsData {
 
-	int solutionIdentifier;
+	protected int solutionIdentifier;
 
 	// Will be extanded in the future with more than 1 StatisticsData object
 	public GeneralSolutionStatisticsData(int solutionId) {

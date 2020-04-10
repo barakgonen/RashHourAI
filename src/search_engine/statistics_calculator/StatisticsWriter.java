@@ -32,17 +32,15 @@ public class StatisticsWriter<T extends GeneralSolutionStatisticsData> {
 			directory.mkdir();
 		}
 		try {
-			FileWriter myWriter = new FileWriter(outputFilePath + ".csv");
+			FileWriter myWriter = new FileWriter(outputFilePath + ".csv", false);
 			for (T solution : solutionsDataCollection) {
 				/// write to output file
 				myWriter.write(solution.getCsvHeader());
-				continue;
+				break;
 			}
 
-			for (T solution : solutionsDataCollection) {
-				solution.getData();
-				myWriter.write(solution.getCsvHeader());
-			}
+			for (T solution : solutionsDataCollection)
+				myWriter.write(solution.getData());
 
 			myWriter.close();
 

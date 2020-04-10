@@ -29,6 +29,10 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 		maxDepth = 0;
 	}
 
+	public void setNumberOfPassedMoves(int passedMoves) {
+		totalStepsPassed = passedMoves;
+	}
+
 	public int getNumberOfNodes() {
 		return numberOfNodes;
 	}
@@ -45,8 +49,8 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 		avgHeuristic += currentNodesHeuristics;
 	}
 
-	public void setBranchingFactor(int numberOfNodesPassed) {
-		branchingFactor = Math.pow(numberOfNodesPassed, 1 / totalStepsPassed);
+	public void setBranchingFactor(int closedListSize) {
+		branchingFactor = Math.pow(closedListSize, 1 / totalStepsPassed);
 	}
 
 	public void setPenetrance(double numberOfNodesPassed) {
@@ -86,13 +90,13 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 	@Override
 	public String getCsvHeader() {
 		// TODO Auto-generated method stub
-		return "numberOfNodes,AverageDepth,MaxDepth,Average-Heuristic,Penetrance,Branching-Factor,TotalCalculationTime\n";
+		return "PuzzleID,numberOfNodes,AverageDepth,MaxDepth,Average-Heuristic,Penetrance,Branching-Factor,TotalCalculationTime(ms)\n";
 	}
 
 	@Override
 	public String getData() {
 		// TODO Auto-generated method stub
-		return numberOfNodes + "," + avgDepth + "," + maxDepth + "," + avgHeuristic + "," + penetrance + ","
-				+ branchingFactor + "," + (endTime - startTime) + "\n";
+		return solutionIdentifier + "," + numberOfNodes + "," + avgDepth + "," + maxDepth + "," + avgHeuristic + ","
+				+ penetrance + "," + branchingFactor + "," + (endTime - startTime) + "\n";
 	}
 }

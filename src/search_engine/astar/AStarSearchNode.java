@@ -56,7 +56,14 @@ public class AStarSearchNode {
 	}
 
 	public boolean isGoalNode() {
-		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().equals(Constants.GOAL_STATE_POS);
+		for (int targetVehicleEndPos = (int) vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos()
+				.getY(); targetVehicleEndPos < Constants.BOARD_SIZE; targetVehicleEndPos++) {
+			Character identifierAtPosition = getCarIdentifier(new Point(Constants.EXIT_RAW, targetVehicleEndPos));
+			if (identifierAtPosition != Constants.UKNOWN_IDENTIFIER
+					&& identifierAtPosition != Constants.TARGET_VEHICLE_IDENTIFIER)
+				return false;
+		}
+		return true;
 	}
 
 	public Set<AStarSearchNode> getSuccessors() {
@@ -69,17 +76,25 @@ public class AStarSearchNode {
 		return successors;
 	}
 
+	public static <T> Map<Integer, List<T>> deepCopyStreamWorkAround(Map<Integer, List<T>> original) {
+		return original.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new ArrayList<>(valueMapper.getValue())));
+	}
+
 	public AStarSearchNode getNextState(Character carToMoveID, Point destenationToMove, int successorIndex) {
 		Set<Point> newEmptySpots = emptySpots.stream().collect(Collectors.toSet());
-		HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//		HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet().stream()
+//				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+		Map<Character, Vehicle> newVehicleMap = vehicles.entrySet().stream()
+				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new Vehicle(valueMapper.getValue())));
 
-		Vehicle updatedVehicle = vehicles.get(carToMoveID);
+		Vehicle updatedVehicle = newVehicleMap.get(carToMoveID);
 
 		Collection<Point> newEmptyPoints = updatedVehicle.moveVehicle(destenationToMove);
 		newEmptySpots.addAll(newEmptyPoints);
 		newEmptySpots.removeAll(updatedVehicle.getLocations());
-		return new AStarSearchNode(newEmptySpots, newVehicleMap, puzzleID, this, successorIndex);
+		return new AStarSearchNode(newEmptySpots, (HashMap<Character, Vehicle>) newVehicleMap, puzzleID, this,
+				successorIndex);
 	}
 
 	private Set<Character> getNeighbors(Point currentEmptySpot) {
@@ -141,7 +156,7 @@ public class AStarSearchNode {
 	}
 
 	public int getUUID() {
-		return 5;
+		return boardIdentifier;
 	}
 
 	public double getHeuristicsValue() {
@@ -171,11 +186,6 @@ public class AStarSearchNode {
 						: true);
 	}
 
-	@Override
-	public int hashCode() {
-		return boardIdentifier;
-	}
-
 	public int getSuccessorIndex() {
 		return successorIndex;
 	}
@@ -202,6 +212,10 @@ public class AStarSearchNode {
 
 	public Vehicle getVehicleByID(Character id) {
 		return vehicles.get(id);
+	}
+
+	public int getNumberOfPassedMoves() {
+		return this.numberOfMoves;
 	}
 
 //	/*

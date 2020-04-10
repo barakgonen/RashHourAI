@@ -27,6 +27,13 @@ public class Vehicle {
 		size = 1;
 	}
 
+	public Vehicle(Vehicle other) {
+		this(other.identifier, other.startPos);
+		endPos = other.endPos;
+		size = other.size;
+		orientation = other.orientation;
+	}
+
 	public void updateVehicle(Point _endPos) {
 		if (startPos.x != _endPos.x && startPos.y == _endPos.y) {
 			orientation = Constants.VERTICAL;

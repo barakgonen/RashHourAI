@@ -12,6 +12,6 @@ class TestIdentifyingBoards {
 		AStarSearchNode s1 = TestsUtils.getSearchNode();
 		AStarSearchNode s2 = TestsUtils.getSearchNode();
 		assertEquals(s1, s2);
-		assertEquals(s1.hashCode(), s2.hashCode());
+		assertEquals(s1.getUUID(), s2.getUUID());
 	}
 }
