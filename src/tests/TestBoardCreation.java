@@ -65,7 +65,7 @@ public class TestBoardCreation {
 	public void testParsedVerticalCarDataInSize3() {
 		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
 		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('P', Constants.VERTICAL, 3, new Point(0, 5), new Point(2, 5));
+		Vehicle expectedVehicle = TestsUtils.getVehicle('P', Constants.VERTICAL, 3, new Point(0, 5));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('P'));
 	}
@@ -74,7 +74,7 @@ public class TestBoardCreation {
 	public void testParsedVerticalCarDataInSize2() {
 		String puzzleAsString = "AABO..P.BO..PXXO..PQQQ...........RRR";
 		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('B', Constants.VERTICAL, 2, new Point(0, 2), new Point(1, 2));
+		Vehicle expectedVehicle = TestsUtils.getVehicle('B', Constants.VERTICAL, 2, new Point(0, 2));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('B'));
 	}
@@ -83,7 +83,7 @@ public class TestBoardCreation {
 	public void testParsedHorizontalCarDataInSize3() {
 		String puzzleAsString = "OAAP..O..P..OXXP....BQQQ..B..E..RRRE";
 		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('Q', Constants.HORIZONTAL, 3, new Point(3, 3), new Point(3, 5));
+		Vehicle expectedVehicle = TestsUtils.getVehicle('Q', Constants.HORIZONTAL, 3, new Point(3, 3));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('Q'));
 	}
@@ -92,7 +92,7 @@ public class TestBoardCreation {
 	public void testParsedHorizontalCarDataInSize2() {
 		String puzzleAsString = "..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.";
 		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		Vehicle expectedVehicle = TestsUtils.getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1), new Point(4, 2));
+		Vehicle expectedVehicle = TestsUtils.getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('D'));
 	}

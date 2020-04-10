@@ -25,26 +25,26 @@ public class HeuristicsTestsWhenTargetVehicleInSizeOfThree {
 
 	@Test
 	void testVehicleDistanceHeuristicDistanceZeroStepsVehicleSizeThree() {
-		assertEquals(0, HeuristicFunCalculator.targetVehiclDistanceFromExit(TestsUtils.getVehicle(
-				Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 3), new Point(2, 5))));
+		assertEquals(0, HeuristicFunCalculator.targetVehiclDistanceFromExit(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 3))));
 	}
 
 	@Test
 	void testVehicleDistanceHeuristicDistanceOneStepVehicleSizeThree() {
-		assertEquals(1, HeuristicFunCalculator.targetVehiclDistanceFromExit(TestsUtils.getVehicle(
-				Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 2), new Point(2, 4))));
+		assertEquals(1, HeuristicFunCalculator.targetVehiclDistanceFromExit(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 2))));
 	}
 
 	@Test
 	void testVehicleDistanceHeuristicDistanceTwoStepsVehicleSizeThree() {
-		assertEquals(2, HeuristicFunCalculator.targetVehiclDistanceFromExit(TestsUtils.getVehicle(
-				Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 1), new Point(2, 3))));
+		assertEquals(2, HeuristicFunCalculator.targetVehiclDistanceFromExit(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 1))));
 	}
 
 	@Test
 	void testVehicleDistanceHeuristicDistanceFourStepsVehicleSizeThree() {
-		assertEquals(3, HeuristicFunCalculator.targetVehiclDistanceFromExit(TestsUtils.getVehicle(
-				Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 0), new Point(2, 2))));
+		assertEquals(3, HeuristicFunCalculator.targetVehiclDistanceFromExit(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 0))));
 	}
 
 }
