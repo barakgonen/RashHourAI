@@ -3,6 +3,7 @@ package search_engine.astar;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import rush_hour.Constants;
+import rush_hour.Movement;
 import rush_hour.RawPuzzleObject;
 import rush_hour.Vehicle;
 
@@ -30,6 +32,7 @@ public class AStarSearchNode {
 	final protected int puzzleID;
 	protected final int successorIndex;
 	protected final int boardIdentifier;
+	private Movement movement;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
 		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0, 0, 0);
@@ -50,9 +53,11 @@ public class AStarSearchNode {
 	}
 
 	private AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
-			AStarSearchNode parentNode, int successorIndex) {
+			AStarSearchNode parentNode, int successorIndex, Movement movementLeadToThisState) {
 		this(emptySpots, vehicles, puzzleID, successorIndex, parentNode.numberOfMoves + 1, parentNode.depthInGraph + 1);
 		this.parent = parentNode;
+		movement = movementLeadToThisState;
+
 	}
 
 	public boolean isGoalNode() {
@@ -87,12 +92,14 @@ public class AStarSearchNode {
 				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new Vehicle(valueMapper.getValue())));
 
 		Vehicle updatedVehicle = newVehicleMap.get(carToMoveID);
-
+		// Here you do know which vehicle should go to where!
+		Movement movement = new Movement(new Point(updatedVehicle.getStartPos()), new Point(destenationToMove),
+				carToMoveID, updatedVehicle.getOrientation());
 		Collection<Point> newEmptyPoints = updatedVehicle.moveVehicle(destenationToMove);
 		newEmptySpots.addAll(newEmptyPoints);
 		newEmptySpots.removeAll(updatedVehicle.getLocations());
 		return new AStarSearchNode(newEmptySpots, (HashMap<Character, Vehicle>) newVehicleMap, puzzleID, this,
-				successorIndex);
+				successorIndex, movement);
 	}
 
 	private Set<Character> getNeighbors(Point currentEmptySpot) {
@@ -216,6 +223,26 @@ public class AStarSearchNode {
 		return this.numberOfMoves;
 	}
 
+	private void setWholeSolution(ArrayList<AStarSearchNode> wholeSolution) {
+		AStarSearchNode currentParent = this.parent;
+		while (currentParent != null) {
+			wholeSolution.add(currentParent);
+			currentParent = currentParent.parent;
+		}
+		Collections.reverse(wholeSolution);
+	}
+
+	public String getPuzzleSolution() {
+		// First of all, need to get all board from the beggining to the end
+		String puzzleSolution = "";
+		ArrayList<AStarSearchNode> wholeSolution = new ArrayList<AStarSearchNode>();
+		setWholeSolution(wholeSolution);
+		for (AStarSearchNode node : wholeSolution)
+			puzzleSolution += (node.movement != null) ? node.movement : "";
+		puzzleSolution += " END";
+		return puzzleSolution;
+	}
+
 //	/*
 //	 * this method is for printing the solution moves, by going up to the parent
 //	 * each time.
@@ -287,146 +314,5 @@ public class AStarSearchNode {
 //		System.out.print("XR" + countX);
 //
 //		System.out.println();
-//	}
-
-//	public void setBoard(String mov, int index) {
-//		int step = (mov.charAt(2) - '0');
-//		if (this.carOrient[index] == 0) {
-//			for (int i = 0; i < this.carSize[index]; i++) {
-//				this.board[this.fixedPosition[index]][this.cPosition[index] + i] = '.';
-//			}
-//		} else if (this.carOrient[index] == 1) {
-//			for (int i = 0; i < this.carSize[index]; i++) {
-//				this.board[this.cPosition[index] + i][this.fixedPosition[index]] = '.';
-//			}
-//		}
-//		if (mov.charAt(0) == 'X' && mov.charAt(1) == 'R') {
-//			if (this.getcPosition()[0] + step > 5) {
-//				return;
-//			} else if (this.getcPosition()[0] + step == 5) {
-//
-//				this.board[this.fixedPosition[0]][5] = mov.charAt(0);
-//				return;
-//			}
-//		}
-//		switch (mov.charAt(1)) {
-//		case 'L':
-//
-//			for (int i = 0; i < this.carSize[index]; i++) {
-//				this.board[this.fixedPosition[index]][this.cPosition[index] - step + i] = mov.charAt(0);
-//			}
-//			break;
-//		case 'R':
-//			for (int i = this.cPosition[index]; i < this.carSize[index] + this.cPosition[index]; i++) {
-//				this.board[this.fixedPosition[index]][i + step] = mov.charAt(0);
-//			}
-//
-//			break;
-//		case 'U':
-//			for (int i = 0; i < this.carSize[index]; i++) {
-//				this.board[this.cPosition[index] - step + i][this.fixedPosition[index]] = mov.charAt(0);
-//			}
-//
-//			break;
-//		case 'D':
-//			for (int i = this.cPosition[index]; i < this.carSize[index] + this.cPosition[index]; i++) {
-//				this.board[i + step][this.fixedPosition[index]] = mov.charAt(0);
-//			}
-//
-//			break;
-//		}
-//
-//	}
-//
-//	// for setPosition we only add or substract the length of move made.
-//	public void setcPosition(String mov, int index) {
-//		int step = (mov.charAt(2) - '0');
-//		switch (mov.charAt(1)) {
-//		case 'L':
-//			this.cPosition[index] -= step;
-//			break;
-//		case 'R':
-//			this.cPosition[index] += step;
-//			break;
-//		case 'U':
-//			this.cPosition[index] -= step;
-//			break;
-//		case 'D':
-//			this.cPosition[index] += step;
-//			break;
-//		}
-//	}
-//
-//	/*
-//	 * Legal Function - for checking if the move gives with the current board is
-//	 * legal to be done or not meaning nothing blocking a car way, or its not out of
-//	 * bounds.
-//	 * 
-//	 * in this method, decode the move to direction and car symbol and length of
-//	 * leap. and by it cheak each parameter if legal.
-//	 * 
-//	 * @param
-//	 * 
-//	 * @index - the index of the car in the arrays for easy calculating.
-//	 * 
-//	 * @mov - the mov given which is build of 2 letters and a numbers example: "AL2"
-//	 */
-//
-//	public boolean legal(String mov, int index) {
-//
-//		int step = (mov.charAt(2) - '0');
-//		if ((mov.charAt(1) == 'L' || mov.charAt(1) == 'R') && (this.getCarOrient()[index] == 1))
-//			return false;
-//
-//		else if ((mov.charAt(1) == 'U' || mov.charAt(1) == 'D') && (this.getCarOrient()[index] == 0))
-//			return false;
-//
-//		else if (((mov.charAt(1) == 'L') && ((this.getcPosition()[index] - step) < 0)) || ((mov.charAt(1) == 'R')
-//				&& ((this.getcPosition()[index] + this.getCarSize()[index] - 1 + step) >= this.getSize()))) {
-//			return false;
-//		} else if (((mov.charAt(1) == 'U') && ((this.getcPosition()[index] - step) < 0)) || ((mov.charAt(1) == 'D')
-//				&& ((this.getcPosition()[index] + this.getCarSize()[index] - 1 + step) >= this.getSize()))) {
-//			return false;
-//		}
-//
-//		// checking if the way not blocked by another car using the board[][]
-//		switch (mov.charAt(1)) {
-//		case 'L':
-//			for (int i = this.cPosition[index] - step; i < this.cPosition[index]; i++) {
-//
-//				if (board[this.fixedPosition[index]][i] != '.'
-//						&& (board[this.fixedPosition[index]][i] != mov.charAt(0)))
-//					return false;
-//			}
-//			break;
-//		case 'R':
-//			for (int i = 0; i < step; i++) {
-//
-//				if (board[this.fixedPosition[index]][this.cPosition[index] + this.carSize[index] + i] != '.'
-//						&& (board[this.fixedPosition[index]][this.cPosition[index] + this.carSize[index] + i] != mov
-//								.charAt(0)))
-//					return false;
-//			}
-//			break;
-//		case 'U':
-//			for (int i = this.cPosition[index] - step; i < this.cPosition[index]; i++) {
-//
-//				if (board[i][this.fixedPosition[index]] != '.'
-//						&& (board[i][this.fixedPosition[index]] != mov.charAt(0)))
-//					return false;
-//			}
-//			break;
-//		case 'D':
-//			for (int i = 0; i < step; i++) {
-//
-//				if (board[this.cPosition[index] + this.carSize[index] + i][this.fixedPosition[index]] != '.'
-//						&& (board[this.cPosition[index] + this.carSize[index] + i][this.fixedPosition[index]] != mov
-//								.charAt(0)))
-//					return false;
-//			}
-//			break;
-//		}
-//
-//		return true;
 //	}
 }

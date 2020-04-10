@@ -15,6 +15,7 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 	protected long endTime;
 	protected int minDepth;
 	protected int maxDepth;
+	protected String puzzleSolution;
 
 	public AStarSolutionStatisticsData(int solutionID) {
 		super(solutionID);
@@ -27,6 +28,7 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 		startTime = System.currentTimeMillis();
 		minDepth = Integer.MAX_VALUE;
 		maxDepth = 0;
+		puzzleSolution = "FAILED";
 	}
 
 	public void setNumberOfPassedMoves(int passedMoves) {
@@ -87,16 +89,20 @@ public class AStarSolutionStatisticsData extends GeneralSolutionStatisticsData {
 			maxDepth = possibleMaxDepth;
 	}
 
+	public void setPuzzleSolution(String solution) {
+		puzzleSolution = solution;
+	}
+
 	@Override
 	public String getCsvHeader() {
 		// TODO Auto-generated method stub
-		return "PuzzleID,numberOfNodes,AverageDepth,MaxDepth,Average-Heuristic,Penetrance,Branching-Factor,TotalCalculationTime(ms)\n";
+		return "PuzzleID,numberOfNodes,AverageDepth,MaxDepth,Average-Heuristic,Penetrance,Branching-Factor,TotalCalculationTime(ms), Puzzle-Solution\n";
 	}
 
 	@Override
 	public String getData() {
 		// TODO Auto-generated method stub
 		return solutionIdentifier + "," + numberOfNodes + "," + avgDepth + "," + maxDepth + "," + avgHeuristic + ","
-				+ penetrance + "," + branchingFactor + "," + (endTime - startTime) + "\n";
+				+ penetrance + "," + branchingFactor + "," + (endTime - startTime) + "," + puzzleSolution + "\n";
 	}
 }

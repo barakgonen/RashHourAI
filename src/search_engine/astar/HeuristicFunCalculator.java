@@ -23,7 +23,7 @@ public final class HeuristicFunCalculator {
 	}
 
 	public static int getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
-		return /* numberOfBlockingVehicles(vehicles) + */ targetVehiclDistanceFromExit(vehicles.stream()
+		return numberOfBlockingVehicles(vehicles) + targetVehiclDistanceFromExit(vehicles.stream()
 				.filter(v -> v.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER).findFirst().get());
 	}
 

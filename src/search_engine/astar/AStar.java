@@ -55,10 +55,10 @@ public class AStar {
 
 				bestGoal = currentNode;
 
-				while (!openList.isEmpty())
-					openList.dequeueMin();
-				ndOpenList.clear();
-				closedList.clear();
+//				while (!openList.isEmpty())
+//					openList.dequeueMin();
+//				ndOpenList.clear();
+//				closedList.clear();
 				break;
 			}
 
@@ -74,10 +74,6 @@ public class AStar {
 			openList.dequeueMin();
 			ndOpenList.remove(currentNode.getUUID());
 			closedList.put(currentNode.getUUID(), currentNode);
-
-			if (currentNode.isGoalNode()) {
-				continue;
-			}
 
 			// loop for working on hash tables, open and closed lists to work with nodes
 			Collection<AStarSearchNode> successors = currentNode.getSuccessors();
@@ -101,15 +97,17 @@ public class AStar {
 		}
 		solutionStatisticsData.setNumberOfNodes(solutionStatisticsData.getNumberOfNodes() - nodesCounter);
 		solutionStatisticsData.calculateFinalData();
+
 		if (bestGoal == null) {
 			System.out.println("No Solution for puzzle: " + startNode.getPuzzleID());
-			return null;
 		}
 
-		else if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000)
-			System.out.println("FAILED solving puzzle: " + startNode.getPuzzleID());
-		else
+		else if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000) {
+			System.out.println("FAILED solving puzzle because of time limitation: " + startNode.getPuzzleID());
+		} else {
 			System.out.println("Solved puzzle!");
+			solutionStatisticsData.setPuzzleSolution(bestGoal.getPuzzleSolution());
+		}
 
 		return new SolvedAstarPuzzle(bestGoal, solutionStatisticsData);
 	}

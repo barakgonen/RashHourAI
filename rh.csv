@@ -1,0 +1,2 @@
+PuzzleID,numberOfNodes,AverageDepth,MaxDepth,Average-Heuristic,Penetrance,Branching-Factor,TotalCalculationTime(ms), Puzzle-Solution
+1,2572,11.734812466983623,29,4.7624416796267495,0.0,0.0,564,FAILED
