@@ -1,8 +1,13 @@
 package tests;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import java.awt.Point;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import rush_hour.Constants;
@@ -56,5 +61,20 @@ public final class TestsUtils {
 				TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(4, 3), new Point(5, 3)));
 
 		return new AStarSearchNode(firstSuccessorExpectedEmptySpots, firstSuccessorVehiclesMap, 1, 1, 1, 1);
+	}
+
+	public static void compareListCollections(List<Point> expected, List<Point> actual) {
+		assertEquals(expected.size(), actual.size());
+
+		for (Point expectedPoint : expected) {
+			if (actual.indexOf(expectedPoint) == -1) {
+				assertFalse("Point: " + expectedPoint + ", wasn't found at actualEmptySpots",
+						actual.indexOf(expectedPoint) == -1);
+			} else
+				actual.remove(expectedPoint);
+		}
+
+		assertEquals(0, actual.size());
+		assertTrue(actual.isEmpty());
 	}
 }

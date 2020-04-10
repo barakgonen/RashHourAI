@@ -83,8 +83,6 @@ public class AStarSearchNode {
 
 	public AStarSearchNode getNextState(Character carToMoveID, Point destenationToMove, int successorIndex) {
 		Set<Point> newEmptySpots = emptySpots.stream().collect(Collectors.toSet());
-//		HashMap<Character, Vehicle> newVehicleMap = (HashMap<Character, Vehicle>) vehicles.entrySet().stream()
-//				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 		Map<Character, Vehicle> newVehicleMap = vehicles.entrySet().stream()
 				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new Vehicle(valueMapper.getValue())));
 
