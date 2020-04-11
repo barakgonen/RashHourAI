@@ -7,44 +7,49 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import rush_hour.Constants;
 import rush_hour.Vehicle;
-import search_engine.astar.HeuristicFunCalculator;
+import search_engine.astar.TargetVehicleDistanceFromExitHeuristic;
 
 public class HeuristicsTestsWhenTargetVehicleInSizeOfThree {
 
 	private Collection<Vehicle> vehiclesMap;
+	private TargetVehicleDistanceFromExitHeuristic calculator;
 
 	@Before
-	public void Setup() {
+	public void SetUp() {
 		vehiclesMap = new ArrayList<>();
-//		vehiclesMap.
+		calculator = new TargetVehicleDistanceFromExitHeuristic();
 	}
 
 	@Test
-	void testVehicleDistanceHeuristicDistanceZeroStepsVehicleSizeThree() {
-		assertEquals(0, HeuristicFunCalculator.targetVehiclDistanceFromExit(
-				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 3))));
+	public void testVehicleDistanceHeuristicDistanceZeroStepsVehicleSizeThree() {
+		vehiclesMap.add(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 3)));
+		assertEquals(0, calculator.calculateValue(vehiclesMap));
 	}
 
 	@Test
-	void testVehicleDistanceHeuristicDistanceOneStepVehicleSizeThree() {
-		assertEquals(1, HeuristicFunCalculator.targetVehiclDistanceFromExit(
-				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 2))));
+	public void testVehicleDistanceHeuristicDistanceOneStepVehicleSizeThree() {
+		vehiclesMap.add(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 2)));
+		assertEquals(1, calculator.calculateValue(vehiclesMap));
 	}
 
 	@Test
-	void testVehicleDistanceHeuristicDistanceTwoStepsVehicleSizeThree() {
-		assertEquals(2, HeuristicFunCalculator.targetVehiclDistanceFromExit(
-				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 1))));
+	public void testVehicleDistanceHeuristicDistanceTwoStepsVehicleSizeThree() {
+		vehiclesMap.add(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 1)));
+		assertEquals(2, calculator.calculateValue(vehiclesMap));
 	}
 
 	@Test
-	void testVehicleDistanceHeuristicDistanceFourStepsVehicleSizeThree() {
-		assertEquals(3, HeuristicFunCalculator.targetVehiclDistanceFromExit(
-				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 0))));
+	public void testVehicleDistanceHeuristicDistanceFourStepsVehicleSizeThree() {
+		vehiclesMap.add(
+				TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 3, new Point(2, 0)));
+		assertEquals(3, calculator.calculateValue(vehiclesMap));
 	}
 
 }

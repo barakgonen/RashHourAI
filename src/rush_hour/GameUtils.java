@@ -15,6 +15,21 @@ public final class GameUtils {
 	private GameUtils() {
 	}
 
+	public static int getTimeLimitFromCommandLine(String[] args) {
+		int defaultTimeLimit = 1000;
+		if (args.length > 0) {
+			try {
+				defaultTimeLimit = Integer.parseInt(args[1]);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			LOGGER.warning("You didn't pass time to solve puzzles, using default value..");
+		}
+		LOGGER.info("Time to solve single puzzle: " + defaultTimeLimit);
+		return defaultTimeLimit;
+	}
+
 	public static String getInputFilePath(String[] args) {
 		String inputFilePath = "./rh.txt";
 		if (args.length > 0) {

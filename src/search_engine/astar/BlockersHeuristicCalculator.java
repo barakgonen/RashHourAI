@@ -4,44 +4,18 @@ import java.awt.Point;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import rush_hour.Constants;
-import rush_hour.Main;
 import rush_hour.Vehicle;
 
-/**
- * This class has a few heuristic functions calculations
- *
- */
-public final class HeuristicFunCalculator {
-	public static Logger LOGGER = Logger.getLogger(Main.class.getName());
-	private static Random rnd = new Random();
+public class BlockersHeuristicCalculator implements HeuristicsCalculator {
 
-	private HeuristicFunCalculator() {
-	}
-
-	public static double getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
-		return numberOfBlockingVehicles(vehicles) + targetVehiclDistanceFromExit(vehicles.stream()
-				.filter(v -> v.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER).findFirst().get());
-
-	}
-
-	/**
-	 * This heuristic calculates the minimum number of actions we have to perform in
-	 * order to get to goal node. our goal node is a node which the target vehicle
-	 * exits the board. This is an admissible heuristic since the number of
-	 * movements to perform is at least the distance of the target vehicle from the
-	 * exit
-	 * 
-	 * @param redVehicle - target vehicle
-	 * @return (Horizontal) distance of targetVehicle from exit
-	 */
-	public static int targetVehiclDistanceFromExit(Vehicle redVehicle) {
-		return (Constants.BOARD_SIZE - 1) - (int) redVehicle.getEndPos().getY();
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "BlockingCars";
 	}
 
 	/**
@@ -53,7 +27,8 @@ public final class HeuristicFunCalculator {
 	 * @param vehicles   - vehicles on map
 	 * @return number of blockers
 	 */
-	public static int numberOfBlockingVehicles(Collection<Vehicle> vehicles) {
+	@Override
+	public double calculateValue(Collection<Vehicle> vehicles) {
 		Set<Vehicle> blockingVehicles = new HashSet<>();
 		for (Point emptySpot : getExitPathOfTargetVehicle(vehicles)) {
 			for (Vehicle v : vehicles) {
@@ -71,4 +46,5 @@ public final class HeuristicFunCalculator {
 		return Constants.TARGET_VEHICLE_EXIT_PATH.stream().filter(p -> (int) p.getY() > targetVehicleEndIndex)
 				.collect(Collectors.toList());
 	}
+
 }

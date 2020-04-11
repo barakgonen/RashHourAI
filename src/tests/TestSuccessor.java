@@ -19,6 +19,7 @@ import rush_hour.Constants;
 import rush_hour.RawPuzzleObject;
 import rush_hour.Vehicle;
 import search_engine.astar.AStarSearchNode;
+import search_engine.astar.TargetVehicleDistanceFromExitHeuristic;
 
 public class TestSuccessor {
 
@@ -26,6 +27,15 @@ public class TestSuccessor {
 	private RawPuzzleObject rawPuzzleObject;
 	private AStarSearchNode searchNode;
 	private final int puzzleID = 2;
+	private TargetVehicleDistanceFromExitHeuristic calculator;
+
+	@Before
+	public void SetUp() {
+		calculator = new TargetVehicleDistanceFromExitHeuristic();
+		rawPuzzleObject = new RawPuzzleObject(puzzleAsString, puzzleID);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
+
+	}
 
 	private Set<AStarSearchNode> getSuccessors() {
 		Set<AStarSearchNode> successors = new HashSet<>();
@@ -54,8 +64,8 @@ public class TestSuccessor {
 		firstSuccExpVhcMap.put('C', TestsUtils.getVehicle('C', Constants.HORIZONTAL, 2, new Point(1, 2)));
 		firstSuccExpVhcMap.put('D', TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(4, 3)));
 
-		AStarSearchNode firstSuccessor = new AStarSearchNode(firstSuccExpEmpPnts, firstSuccExpVhcMap, puzzleID, 1, 1,
-				1);
+		AStarSearchNode firstSuccessor = new AStarSearchNode(firstSuccExpEmpPnts, firstSuccExpVhcMap, puzzleID, 1, 1, 1,
+				calculator);
 
 		// Second Successor
 		Set<Point> secSuccExpEmpPnts = new HashSet<>();
@@ -81,7 +91,8 @@ public class TestSuccessor {
 		secSuccExpVhcMap.put('C', TestsUtils.getVehicle('C', Constants.HORIZONTAL, 2, new Point(1, 3)));
 		secSuccExpVhcMap.put('D', TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(3, 3)));
 
-		AStarSearchNode secondSuccessor = new AStarSearchNode(secSuccExpEmpPnts, secSuccExpVhcMap, puzzleID, 2, 1, 1);
+		AStarSearchNode secondSuccessor = new AStarSearchNode(secSuccExpEmpPnts, secSuccExpVhcMap, puzzleID, 2, 1, 1,
+				calculator);
 
 		// Third Successor
 		Set<Point> thrdSuccExpEmpPnts = new HashSet<>();
@@ -107,18 +118,13 @@ public class TestSuccessor {
 		thrdSuccExpVhcMap.put('C', TestsUtils.getVehicle('C', Constants.HORIZONTAL, 2, new Point(1, 2)));
 		thrdSuccExpVhcMap.put('D', TestsUtils.getVehicle('D', Constants.VERTICAL, 2, new Point(3, 3)));
 
-		AStarSearchNode thirdtSuccessor = new AStarSearchNode(thrdSuccExpEmpPnts, thrdSuccExpVhcMap, puzzleID, 3, 1, 1);
+		AStarSearchNode thirdtSuccessor = new AStarSearchNode(thrdSuccExpEmpPnts, thrdSuccExpVhcMap, puzzleID, 3, 1, 1,
+				calculator);
 
 		successors.add(firstSuccessor);
 		successors.add(secondSuccessor);
 		successors.add(thirdtSuccessor);
 		return successors;
-	}
-
-	@Before
-	public void SetUp() {
-		rawPuzzleObject = new RawPuzzleObject(puzzleAsString, puzzleID);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
 	}
 
 	@Test
@@ -239,7 +245,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingOneStepWest() {
 		rawPuzzleObject = new RawPuzzleObject("..ABB...A.J..DXXJ..DEEF..OOOF.......", 2);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.add(new Point(4, 3));
@@ -257,7 +263,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingOneStepNorth() {
 		rawPuzzleObject = new RawPuzzleObject("..ABB...A.J..DXXJ..DEEF..OOOF.......", 2);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.remove(new Point(0, 1));
@@ -292,7 +298,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingTwoStepsEast() {
 		rawPuzzleObject = new RawPuzzleObject("..AOOO..AB..XXCB.RDDCEERFGHH.RFGII..", 4);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.remove(new Point(5, 4));
@@ -312,7 +318,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingTwoStepsWest() {
 		rawPuzzleObject = new RawPuzzleObject("A..RRRA..B.PXX.BCPQQQDCP..EDFFIIEHH.", 3);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.remove(new Point(0, 1));
@@ -332,7 +338,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingThreeStepsNorth() {
 		rawPuzzleObject = new RawPuzzleObject("..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.", 35);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.remove(new Point(1, 4));
@@ -352,7 +358,7 @@ public class TestSuccessor {
 	@Test
 	public void testMovingThreeStepsSouth() {
 		rawPuzzleObject = new RawPuzzleObject("..OAAP..OB.PXXOB.PKQQQ..KDDEF.GG.EF.", 35);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		List<Point> expectedEmptySpots = searchNode.getEmptySpots().stream().collect(Collectors.toList());
 		expectedEmptySpots.remove(new Point(3, 5));
@@ -386,7 +392,7 @@ public class TestSuccessor {
 	@Test
 	public void testGeneratingExpectedNumberOfSuccessorsFromAnotherPuzzle() {
 		rawPuzzleObject = new RawPuzzleObject("AA...OP..Q.OPXXQ.OP..Q..B...CCB.RRR.", 4);
-		searchNode = new AStarSearchNode(rawPuzzleObject);
+		searchNode = new AStarSearchNode(rawPuzzleObject, calculator);
 
 		Collection<AStarSearchNode> actualSuccessors = searchNode.getSuccessors();
 		assertEquals(11, actualSuccessors.size());

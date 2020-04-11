@@ -1,0 +1,11 @@
+Problem,HeuristicName,N,d/N,Success(Y/N),Time(ms),EBF,avg H value, min Depth, max Depth,Puzzle-Solution
+1,BlockingCars,848,0.008820287,Y,244,2.168642044,2.061320755,1,8, CL3 --> OD3 --> AR4 --> PU1 --> BU1 --> RL2 --> QD2 --> XR3 --> END
+2,BlockingCars,709,0.009638554,Y,99,2.141880035,2.705218618,1,8, EL1 --> PD2 --> XR1 --> AD1 --> OL3 --> BU1 --> CU2 --> XR3 --> END
+3,BlockingCars,479,0.025547445,Y,82,1.442420959,1.901878914,1,14, OU2 --> PU3 --> AR3 --> CR2 --> OD3 --> XR1 --> BU4 --> XL1 --> OU3 --> AL3 --> CL3 --> OD3 --> PD3 --> XR3 --> END
+4,BlockingCars,148,0.056962025,Y,14,1.570159912,1.452702703,1,9, OD3 --> XL1 --> AU3 --> XR1 --> OU3 --> QL3 --> RL2 --> PD3 --> XR3 --> END
+5,BlockingCars,1077,0.0078125,Y,96,2.029819489,2.649953575,1,9, FL3 --> EL3 --> GD2 --> AR1 --> PU1 --> RL1 --> OD3 --> QD2 --> XR3 --> END
+6,BlockingCars,667,0.012552301,Y,62,1.912719727,3.269865067,1,9, XL1 --> EU3 --> DR1 --> FU1 --> RL3 --> QD1 --> OD2 --> PD2 --> XR4 --> END
+7,BlockingCars,2036,0.005826983,Y,224,1.689056396,2.22151277,1,13, FD2 --> CD4 --> DD2 --> BR2 --> EU1 --> XR1 --> AD4 --> XL1 --> ED1 --> BL4 --> DU2 --> EU1 --> XR3 --> END
+8,BlockingCars,814,0.014150943,Y,92,1.703613281,3.308353808,1,11, AL3 --> CU1 --> BL2 --> DU2 --> EU2 --> XR3 --> IU2 --> QL1 --> PL1 --> GL1 --> OD3 --> XR1 --> END
+9,BlockingCars,455,0.02484472,Y,57,1.533103943,1.641758242,2,12, OD1 --> XR1 --> PU3 --> QL1 --> DD2 --> XR1 --> AD1 --> EL2 --> BL1 --> CL1 --> FU2 --> XR2 --> END
+10,BlockingCars,1599,0.010526316,Y,176,1.440383911,1.175734834,1,17, CL1 --> OU1 --> QR2 --> XR2 --> BD4 --> AR1 --> DR1 --> PU2 --> QL3 --> XL2 --> EU2 --> HL1 --> FL1 --> OD3 --> CR1 --> EU2 --> XR3 --> END

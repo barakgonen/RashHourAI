@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import rush_hour.Constants;
 import rush_hour.Vehicle;
-import search_engine.astar.HeuristicFunCalculator;
+import search_engine.astar.BlockersHeuristicCalculator;
 
 public class TestGenerationOfTargetCarExitPath {
 	@Test
@@ -23,7 +23,8 @@ public class TestGenerationOfTargetCarExitPath {
 		exitPath.add(new Point(2, 3));
 		exitPath.add(new Point(2, 4));
 		exitPath.add(new Point(2, 5));
-		assertEquals(exitPath, HeuristicFunCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
+		assertEquals(exitPath,
+				BlockersHeuristicCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
 	}
 
 	@Test
@@ -34,7 +35,8 @@ public class TestGenerationOfTargetCarExitPath {
 		exitPath.add(new Point(2, 3));
 		exitPath.add(new Point(2, 4));
 		exitPath.add(new Point(2, 5));
-		assertEquals(exitPath, HeuristicFunCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
+		assertEquals(exitPath,
+				BlockersHeuristicCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
 	}
 
 	@Test
@@ -44,7 +46,8 @@ public class TestGenerationOfTargetCarExitPath {
 		List<Point> exitPath = new ArrayList<>();
 		exitPath.add(new Point(2, 4));
 		exitPath.add(new Point(2, 5));
-		assertEquals(exitPath, HeuristicFunCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
+		assertEquals(exitPath,
+				BlockersHeuristicCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
 	}
 
 	@Test
@@ -53,7 +56,8 @@ public class TestGenerationOfTargetCarExitPath {
 				new Point(2, 3));
 		List<Point> exitPath = new ArrayList<>();
 		exitPath.add(new Point(2, 5));
-		assertEquals(exitPath, HeuristicFunCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
+		assertEquals(exitPath,
+				BlockersHeuristicCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
 	}
 
 	@Test
@@ -61,6 +65,7 @@ public class TestGenerationOfTargetCarExitPath {
 		Vehicle targetVehicle = TestsUtils.getVehicle(Constants.TARGET_VEHICLE_IDENTIFIER, Constants.HORIZONTAL, 2,
 				new Point(2, 4));
 		List<Point> exitPath = new ArrayList<>();
-		assertEquals(exitPath, HeuristicFunCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
+		assertEquals(exitPath,
+				BlockersHeuristicCalculator.getExitPathOfTargetVehicle(Collections.singleton(targetVehicle)));
 	}
 }

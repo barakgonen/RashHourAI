@@ -12,6 +12,8 @@ public class AStar {
 	protected AStarSearchNode prev;
 	protected AStarSolutionStatisticsData solutionStatisticsData;
 
+	private AStarSearchNode[] path;
+
 	// constructor for AStar and its parameters
 	public AStar() {
 		openList = new FibonacciHeap<>();
@@ -30,8 +32,9 @@ public class AStar {
 	 * put the node we worked with in the closed list .. and we continue with this
 	 * way untill we find the goal. or the openlist is embty.
 	 */
-	public SolvedAstarPuzzle getBestSolution(AStarSearchNode startNode) {
-		solutionStatisticsData = new AStarSolutionStatisticsData(startNode.getPuzzleID());
+	public SolvedPuzzle getBestSolution(AStarSearchNode startNode, HeuristicsCalculator calculator,
+			double timeLimitForPuzzle) {
+		solutionStatisticsData = new AStarSolutionStatisticsData(startNode.getPuzzleID(), calculator.getName());
 		openList.enqueue(startNode, startNode.getEvaluationFunc());
 		ndOpenList.put(startNode.getUUID(), startNode);
 
@@ -94,14 +97,14 @@ public class AStar {
 			System.out.println("No Solution for puzzle: " + startNode.getPuzzleID());
 		}
 
-		else if (solutionStatisticsData.getTotalRunningTimeForSolution() > 1000) {
+		else if (solutionStatisticsData.getTotalRunningTimeForSolution() > timeLimitForPuzzle) {
 			System.out.println("FAILED solving puzzle because of time limitation: " + startNode.getPuzzleID());
 		} else {
 			System.out.println("Solved puzzle!");
 			solutionStatisticsData.setPuzzleSolution(bestGoal.getPuzzleSolution());
 		}
 
-		return new SolvedAstarPuzzle(bestGoal, solutionStatisticsData);
+		return new SolvedPuzzle(solutionStatisticsData);
 	}
 
 	private boolean shouldNotExpandNode(AStarSearchNode currentNode) {

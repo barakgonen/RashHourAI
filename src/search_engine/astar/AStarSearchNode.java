@@ -33,42 +33,46 @@ public class AStarSearchNode {
 	protected final int successorIndex;
 	protected final long boardIdentifier;
 	private Movement movement;
+	private HeuristicsCalculator hCalc;
 
-	public AStarSearchNode(RawPuzzleObject obj) {
-		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0, 0, 0);
+	public AStarSearchNode(RawPuzzleObject obj, HeuristicsCalculator calculator) {
+		this(obj.getEmptySpots(), obj.getVehiclesMapping(), obj.getPuzzleId(), 0, 0, 0, calculator);
 	}
 
 	public AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
-			int successorIndex, int numberOfMoves, int depthInGraph) {
+			int successorIndex, int numberOfMoves, int depthInGraph, HeuristicsCalculator calculator) {
 		this.emptySpots = emptySpots;
 		this.vehicles = vehicles;
 		this.puzzleID = puzzleID;
 		this.parent = null;
 		this.successorIndex = successorIndex;
-		heuristicValue = HeuristicFunCalculator.getCalculatedHeuristicValueForState(this.vehicles.values());
 		this.numberOfMoves = numberOfMoves;
+		hCalc = calculator;
+		heuristicValue = hCalc.calculateValue(vehicles.values());
 		this.evaluationFunc = this.heuristicValue + this.numberOfMoves;
 		this.depthInGraph = depthInGraph;
 		this.boardIdentifier = this.generateStateIdentifier();
 	}
 
 	private AStarSearchNode(Collection<Point> emptySpots, HashMap<Character, Vehicle> vehicles, int puzzleID,
-			AStarSearchNode parentNode, int successorIndex, Movement movementLeadToThisState) {
-		this(emptySpots, vehicles, puzzleID, successorIndex, parentNode.numberOfMoves + 1, parentNode.depthInGraph + 1);
+			AStarSearchNode parentNode, int successorIndex, Movement movementLeadToThisState,
+			HeuristicsCalculator calculator) {
+		this(emptySpots, vehicles, puzzleID, successorIndex, parentNode.numberOfMoves + 1, parentNode.depthInGraph + 1,
+				calculator);
 		this.parent = parentNode;
 		movement = movementLeadToThisState;
 
 	}
 
 	public boolean isGoalNode() {
-		for (int targetVehicleEndPos = (int) vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos()
-				.getY(); targetVehicleEndPos < Constants.BOARD_SIZE; targetVehicleEndPos++) {
+		for (int targetVehicleEndPos = (int) vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().getY()
+				+ 1; targetVehicleEndPos < Constants.BOARD_SIZE; targetVehicleEndPos++) {
 			Character identifierAtPosition = getCarIdentifier(new Point(Constants.EXIT_RAW, targetVehicleEndPos));
 			if (identifierAtPosition != Constants.UKNOWN_IDENTIFIER
 					&& identifierAtPosition != Constants.TARGET_VEHICLE_IDENTIFIER)
 				return false;
 		}
-		return true;
+		return vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getEndPos().getY() >= 5;
 	}
 
 	public Set<AStarSearchNode> getSuccessors() {
@@ -79,11 +83,6 @@ public class AStarSearchNode {
 				if (canNeighborMoveHere(emptySpot, carIdentifier))
 					successors.add(getNextState(carIdentifier, emptySpot, ++successorIndex));
 		return successors;
-	}
-
-	public static <T> Map<Integer, List<T>> deepCopyStreamWorkAround(Map<Integer, List<T>> original) {
-		return original.entrySet().stream()
-				.collect(Collectors.toMap(Map.Entry::getKey, valueMapper -> new ArrayList<>(valueMapper.getValue())));
 	}
 
 	public AStarSearchNode getNextState(Character carToMoveID, Point destenationToMove, int successorIndex) {
@@ -109,7 +108,7 @@ public class AStarSearchNode {
 				nextStateBoard[(int) pos.getX()][(int) pos.getY()] = newVehicle.getIdentifier();
 		}
 		return new AStarSearchNode(newEmptySpots, (HashMap<Character, Vehicle>) newVehicleMap, puzzleID, this,
-				successorIndex, movement);
+				successorIndex, movement, this.hCalc);
 	}
 
 	private Set<Character> getNeighbors(Point currentEmptySpot) {
@@ -221,7 +220,6 @@ public class AStarSearchNode {
 		return id;
 	}
 
-	// remove me
 	public Collection<Point> getEmptySpots() {
 		return emptySpots;
 	}
@@ -235,7 +233,7 @@ public class AStarSearchNode {
 	}
 
 	private void setWholeSolution(ArrayList<AStarSearchNode> wholeSolution) {
-		AStarSearchNode currentParent = this.parent;
+		AStarSearchNode currentParent = this;
 		while (currentParent != null) {
 			wholeSolution.add(currentParent);
 			currentParent = currentParent.parent;
@@ -252,5 +250,9 @@ public class AStarSearchNode {
 			puzzleSolution += (node.movement != null) ? node.movement : "";
 		puzzleSolution += " END";
 		return puzzleSolution;
+	}
+
+	public String getMovement() {
+		return movement.toString();
 	}
 }
