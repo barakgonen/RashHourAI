@@ -1,6 +1,5 @@
 package search_engine.astar;
 
-import java.util.Collection;
 import java.util.HashMap;
 
 import search_engine.FibonacciHeap;
@@ -8,8 +7,8 @@ import search_engine.FibonacciHeap;
 public class AStar {
 
 	protected FibonacciHeap<AStarSearchNode> openList;
-	protected HashMap<Integer, AStarSearchNode> ndOpenList;
-	protected HashMap<Integer, AStarSearchNode> closedList;
+	protected HashMap<Long, AStarSearchNode> ndOpenList;
+	protected HashMap<Long, AStarSearchNode> closedList;
 	protected AStarSearchNode prev;
 	protected AStarSolutionStatisticsData solutionStatisticsData;
 
@@ -52,13 +51,7 @@ public class AStar {
 			if (currentNode.isGoalNode()) {
 				solutionStatisticsData.setBranchingFactor(closedList.size());
 				solutionStatisticsData.setPenetrance(closedList.size());
-
 				bestGoal = currentNode;
-
-//				while (!openList.isEmpty())
-//					openList.dequeueMin();
-//				ndOpenList.clear();
-//				closedList.clear();
 				break;
 			}
 
@@ -76,8 +69,7 @@ public class AStar {
 			closedList.put(currentNode.getUUID(), currentNode);
 
 			// loop for working on hash tables, open and closed lists to work with nodes
-			Collection<AStarSearchNode> successors = currentNode.getSuccessors();
-			for (AStarSearchNode successorNode : successors) {
+			for (AStarSearchNode successorNode : currentNode.getSuccessors()) {
 				if (closedList.containsKey(successorNode.getUUID())) {
 					continue;
 				}

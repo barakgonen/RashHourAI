@@ -77,13 +77,15 @@ public class HeuristicsTestWhenTargetVehicleInSizeOfTwo {
 		assertEquals(2, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
 	}
 
+	// We assume all puzzles are solvable! thus, vehicles A & B wan't be in that
+	// places
 	@Test
 	public void testBlockingVehiclesHeuristicCalculationWithTwoHorizontalBlockers() {
 		vehiclesMap.add(TestsUtils.getVehicle('N', Constants.VERTICAL, 2, new Point(0, 3)));
 		vehiclesMap.add(TestsUtils.getVehicle('A', Constants.HORIZONTAL, 2, new Point(2, 2)));
 		vehiclesMap.add(TestsUtils.getVehicle('B', Constants.HORIZONTAL, 2, new Point(2, 4)));
 		vehiclesMap.add(TestsUtils.getVehicle('P', Constants.HORIZONTAL, 3, new Point(4, 1)));
-		assertEquals(2, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
+		assertEquals(0, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
 	}
 
 	@Test
@@ -95,6 +97,7 @@ public class HeuristicsTestWhenTargetVehicleInSizeOfTwo {
 		assertEquals(3, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
 	}
 
+	// A is not in valid place, discarding it
 	@Test
 	public void testBlockingVehiclesHeuristicCalculationWithOneHorizontalAndTwoVertiaclBlockers() {
 		vehiclesMap.add(TestsUtils.getVehicle('B', Constants.HORIZONTAL, 2, new Point(0, 0)));
@@ -102,7 +105,7 @@ public class HeuristicsTestWhenTargetVehicleInSizeOfTwo {
 		vehiclesMap.add(TestsUtils.getVehicle('P', Constants.VERTICAL, 2, new Point(2, 4)));
 		vehiclesMap.add(TestsUtils.getVehicle('N', Constants.VERTICAL, 3, new Point(0, 5)));
 		vehiclesMap.add(TestsUtils.getVehicle('S', Constants.HORIZONTAL, 2, new Point(4, 0)));
-		assertEquals(3, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
+		assertEquals(2, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
 	}
 
 	public void testBlockingVehiclesHeuristicCalculationWithFourVerticalBlockers() {
@@ -119,8 +122,8 @@ public class HeuristicsTestWhenTargetVehicleInSizeOfTwo {
 	public void testBlockingVehiclesHeuristicCalculationWithThreeHorizontalAndOneVertical() {
 		vehiclesMap.add(TestsUtils.getVehicle('B', Constants.HORIZONTAL, 2, new Point(1, 1)));
 		vehiclesMap.add(TestsUtils.getVehicle('A', Constants.HORIZONTAL, 2, new Point(2, 2)));
-		vehiclesMap.add(TestsUtils.getVehicle('N', Constants.VERTICAL, 3, new Point(5, 3)));
+		vehiclesMap.add(TestsUtils.getVehicle('N', Constants.VERTICAL, 3, new Point(3, 3)));
 		vehiclesMap.add(TestsUtils.getVehicle('S', Constants.HORIZONTAL, 2, new Point(2, 4)));
-		assertEquals(2, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
+		assertEquals(0, HeuristicFunCalculator.numberOfBlockingVehicles(vehiclesMap));
 	}
 }

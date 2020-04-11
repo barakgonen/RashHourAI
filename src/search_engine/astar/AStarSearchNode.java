@@ -31,7 +31,7 @@ public class AStarSearchNode {
 	protected HashMap<Character, Vehicle> vehicles;
 	final protected int puzzleID;
 	protected final int successorIndex;
-	protected final int boardIdentifier;
+	protected final long boardIdentifier;
 	private Movement movement;
 
 	public AStarSearchNode(RawPuzzleObject obj) {
@@ -99,6 +99,15 @@ public class AStarSearchNode {
 				updatedVehicle.getOrientation());
 		newEmptySpots.addAll(newEmptyPoints);
 		newEmptySpots.removeAll(updatedVehicle.getLocations());
+		char[][] nextStateBoard = new char[Constants.BOARD_SIZE][Constants.BOARD_SIZE];
+
+		for (Point empty : newEmptySpots) {
+			nextStateBoard[(int) empty.getX()][(int) empty.getY()] = '.';
+		}
+		for (Vehicle newVehicle : newVehicleMap.values()) {
+			for (Point pos : newVehicle.getLocations())
+				nextStateBoard[(int) pos.getX()][(int) pos.getY()] = newVehicle.getIdentifier();
+		}
 		return new AStarSearchNode(newEmptySpots, (HashMap<Character, Vehicle>) newVehicleMap, puzzleID, this,
 				successorIndex, movement);
 	}
@@ -161,7 +170,7 @@ public class AStarSearchNode {
 		return evaluationFunc;
 	}
 
-	public int getUUID() {
+	public long getUUID() {
 		return boardIdentifier;
 	}
 
@@ -196,19 +205,20 @@ public class AStarSearchNode {
 		return successorIndex;
 	}
 
-	private int generateStateIdentifier() {
-		List<Integer> evaluationLst = new ArrayList<>();
-
-		for (int i = 0; i < Constants.BOARD_SIZE; i++) {
-			for (int j = 0; j < Constants.BOARD_SIZE; j++) {
-				Point currentPoint = new Point(i, j);
-				Character identifier = getCarIdentifier(currentPoint);
-				int val = (int) Constants.STATIC_POINT_TO_VALUE.get(currentPoint);
-				int multiplyFactor = (identifier.charValue() == ' ') ? 32 : ((identifier + 1) - 'A');
-				evaluationLst.add(val * multiplyFactor);
-			}
+	private long generateStateIdentifier() {
+		long id = 1;
+		id = id * 10;
+		id += vehicles.get(Constants.TARGET_VEHICLE_IDENTIFIER).getStartPos().getY();
+		List<Vehicle> withoutTargetVehicle = vehicles.values().stream()
+				.filter(v -> v.getIdentifier() != Constants.TARGET_VEHICLE_IDENTIFIER).collect(Collectors.toList());
+		for (Vehicle v : withoutTargetVehicle) {
+			id = id * 10;
+			if (v.getOrientation() == Constants.HORIZONTAL)
+				id += v.getStartPos().getY();
+			else
+				id += v.getStartPos().getX();
 		}
-		return evaluationLst.stream().collect(Collectors.summingInt(Integer::intValue));
+		return id;
 	}
 
 	// remove me

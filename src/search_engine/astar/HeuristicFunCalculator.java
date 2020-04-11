@@ -27,6 +27,7 @@ public final class HeuristicFunCalculator {
 	public static double getCalculatedHeuristicValueForState(Collection<Vehicle> vehicles) {
 		return numberOfBlockingVehicles(vehicles) + targetVehiclDistanceFromExit(vehicles.stream()
 				.filter(v -> v.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER).findFirst().get());
+
 	}
 
 	/**
@@ -56,11 +57,10 @@ public final class HeuristicFunCalculator {
 		Set<Vehicle> blockingVehicles = new HashSet<>();
 		for (Point emptySpot : getExitPathOfTargetVehicle(vehicles)) {
 			for (Vehicle v : vehicles) {
-				if (v.isPointIntersectsWithMe(emptySpot))
+				if (v.getOrientation() == Constants.VERTICAL && v.isPointIntersectsWithMe(emptySpot))
 					blockingVehicles.add(v);
 			}
 		}
-		blockingVehicles.removeIf(vehicle -> vehicle.getIdentifier() == Constants.TARGET_VEHICLE_IDENTIFIER);
 		return blockingVehicles.size();
 	}
 

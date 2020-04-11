@@ -18,7 +18,6 @@ import rush_hour.Constants;
 import rush_hour.GameUtils;
 import rush_hour.RawPuzzleObject;
 import rush_hour.Vehicle;
-import search_engine.astar.AStarSearchNode;
 
 public class TestBoardCreation {
 	public Set<Character> getCarsIdentifiers(String puzzle) {
@@ -96,14 +95,5 @@ public class TestBoardCreation {
 		Vehicle expectedVehicle = TestsUtils.getVehicle('D', Constants.HORIZONTAL, 2, new Point(4, 1));
 
 		assertEquals(expectedVehicle, rawPuzzle.getVehicle('D'));
-	}
-
-	@Test
-	public void testCreateAnEmptyBoard() {
-		String puzzleAsString = "............XX......................";
-		RawPuzzleObject rawPuzzle = new RawPuzzleObject(puzzleAsString, 3);
-		AStarSearchNode searchNode = new AStarSearchNode(rawPuzzle);
-
-		assertEquals(21096, searchNode.getUUID());
 	}
 }
